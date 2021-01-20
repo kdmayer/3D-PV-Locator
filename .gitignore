@@ -1,0 +1,4 @@
+# Created by .ignore support plugin (hsz.mobi)
+.DS_Store
+models/classification
+models/segmentation/weights_3_30epochs.pt
