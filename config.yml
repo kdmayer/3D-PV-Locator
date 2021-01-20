@@ -1,0 +1,58 @@
+# Configuration
+
+# Which part of the pipeline do you want to execute?
+run_tile_creator: 0
+
+run_tile_downloader: 0
+
+run_tile_processor: 0
+
+run_tile_coords_updater: 0
+
+run_registry_creator: 1
+
+# -------- Pipeline Configuration --------
+# Classification threshold
+cls_threshold: 0.68
+
+# Segmentation threshold:
+seg_threshold: 0.55
+
+# Input resolution for CNN, is fixed for Inception-v3
+input_size: 299
+
+# Batch size should be as large as possible to speed up the classification process
+batch_size: 10
+
+# -------- Data --------
+# DIR where tiles are saved
+tile_dir: data/tiles
+
+# Path where pickle with tile coordinates is saved
+tile_coords_path: data/coords/Tile_coords_Bottrop.pickle
+
+# Path to csv where PV locations are stored
+pv_db_path: data/pv_database/PV_db.csv
+
+# Path to csv which lists all completely processed tiles
+processed_path: logs/processing/Processed.csv
+
+# Path to csv which lists all tiles where processing went wrong
+not_processed_path: logs/processing/notProcessed.csv
+
+# Path to csv which lists all downloaded tiles
+# Only fully downloaded tiles are stored here
+downloaded_path: logs/downloading/DownloadedTiles.csv
+
+# Path to csv which lists all tiles where downloading went wrong
+not_downloaded_path: logs/downloading/notDownloadedTiles.csv
+
+# Path to geojson for all German states
+geojson_path: data/deutschlandGeoJSON/2_bundeslaender/1_sehr_hoch.geojson
+
+# -------- Model Checkpoint --------
+# Path for loading classification model weights
+cls_checkpoint_path: models/classification/cls_bz_8_lr_0.0001_ir_7_25.tar
+
+# Path for loading segmentation model weights
+seg_checkpoint_path: models/segmentation/weights_3_30epochs.pt
