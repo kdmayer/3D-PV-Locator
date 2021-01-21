@@ -2,6 +2,8 @@ import geopandas as gpd
 import pandas as pd
 from shapely import wkt
 
+# Create Tile_coords_Essen.pickle
+# ...
 # Load PV polygons from our PV_db database file
 # Buffer polygons
 # Dissolve geometries
@@ -35,6 +37,10 @@ class RegistryCreator():
         self.PV_gdf = self.PV_gdf.explode().reset_index().drop(columns=['level_1'])
 
         self.PV_gdf['raw_area_sqm'] = self.PV_gdf['geometry'].to_crs(epsg=5243).area
+
+
+
+
 
     def run(self):
 

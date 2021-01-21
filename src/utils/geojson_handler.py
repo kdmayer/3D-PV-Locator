@@ -5,7 +5,7 @@ import pickle
 
 class GeoJsonHandler(object):
 
-    def __init__(self, input_dir):
+    def __init__(self, input_dir, name="Nordrhein-Westfalen"):
 
         self.geojson_dir = input_dir
 
@@ -13,32 +13,44 @@ class GeoJsonHandler(object):
 
             self.data = json.load(f)
 
-        self.polygon = self.definePolygon()
+        self.polygon = self.definePolygon(name)
 
-    def definePolygon(self):
+    def definePolygon(self, name):
 
-        # Load geojson for all German states and select NRW
-        for feature in self.data['features']:
+        # name should either be "Nordrhein-Westfalen" which is the overall state we are analyzing OR a single county within that state
+        if name == "Nordrhein-Westfalen":
 
-            # Select the state of NRW
-            if feature['properties']['NAME_1'] == 'Nordrhein-Westfalen':
-                # list containing all NRW coordinates
-                nrw_coords = feature['geometry']['coordinates']
+            # Load geojson for all German states and select NRW
+            for feature in self.data['features']:
 
-        # Unlist nrw_coords
-        nrw_coords = list(chain(*nrw_coords))
+                if name == "Nordrhein-Westfalen":
 
-        nrw_coords_tuples = [tuple(elem) for elem in nrw_coords]
+                    # Select the state of NRW
+                    if feature['properties']['NAME_1'] == "Nordrhein-Westfalen":
+                        # list containing all NRW coordinates
+                        coords = feature['geometry']['coordinates']
+
+        else:
+
+            for feature in self.data['features']:
+
+                if feature["properties"]['NAME_3'] == name:
+
+                    coords = feature['geometry']['coordinates']
+
+        # Unlist coords
+        coords = list(chain(*coords))
+
+        coords_tuples = [tuple(elem) for elem in coords]
 
         # It is a closed polygon
         # TODO add assert statement to verify that it is a closed polygon
-        polygon = Polygon(nrw_coords_tuples)
+        polygon = Polygon(coords_tuples)
 
         return polygon
 
     def returnTileCoords(self, path_to_pickle):
 
-        # Tile_coords specifies almost 600,000 tiles.
         with open(path_to_pickle, "rb") as f:
 
             Tile_coords = pickle.load(f)
