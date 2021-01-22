@@ -29,7 +29,10 @@ batch_size: 10
 tile_dir: data/tiles
 
 # Path where pickle with tile coordinates is saved
-tile_coords_path: data/coords/Tile_coords_Bottrop.pickle
+tile_coords_path: data/coords/Essen.pickle
+
+# Path to shapefile containing rooftop polygons:
+rooftop_polygon_path: data/rooftop_polygons/valid_polygon_Essen.shp
 
 # Path to csv where PV locations are stored
 pv_db_path: data/pv_database/PV_db.csv

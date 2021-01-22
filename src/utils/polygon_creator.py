@@ -13,6 +13,7 @@ class PolygonCreator():
         self.earth_radius = earth_radius
         # dlat spans a distance of self.side meters in north-south direction
         self.dlat = dlat
+        self.epsg = 4326
 
     def _deltapx2latlon(self, px_distance):
 
