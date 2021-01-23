@@ -39,27 +39,25 @@ class RegistryCreator():
         # Intersect PV panels and rooftop polygons to enrich all the PV polygons with the attributes of their respective rooftop polygon
         self.PV_intersection_gdf = gpd.overlay(self.PV_gdf, self.rooftop_gdf, how="intersection")
 
-        # Symmetrcial difference between PV panels and rooftop polygons
-        # Symmetrical difference is the opposite of "intersection" and returns geometries that are only part
-        # of one of the GeoDataFrames but not of both
-        # Is this actually what we want?!
-        self.PV_sym_diff = gpd.overlay(self.PV_gdf, self.rooftop_gdf, how="symmetric_difference")
+        # PV polygons which are not on rooftops. This includes free-standing PV units and geometries overhanging from rooftops
+        self.PV_diff_gdf = gpd.overlay(self.PV_gdf, self.rooftop_gdf, how="difference")
 
     def run(self):
 
+        self.PV_gdf.to_file(driver='ESRI Shapefile', filename="/Users/kevin/desktop/deleteme/PVs_gdf_initial.shp")
+
         self._merge_splitted_PVs()
+
+        self.rooftop_gdf.to_file(driver='ESRI Shapefile', filename="/Users/kevin/desktop/deleteme/initial_rooftops.shp")
+
+        self.PV_gdf.to_file(driver='ESRI Shapefile', filename="/Users/kevin/desktop/deleteme/PVs_gdf_merge_splitted.shp")
 
         self._overlay_ops()
 
+        self.PV_diff_gdf.to_file(driver='ESRI Shapefile', filename="/Users/kevin/desktop/deleteme/PV_diff_gdf.shp")
+
+        self.PV_diff_gdf.to_file(driver='ESRI Shapefile', filename="/Users/kevin/desktop/deleteme/PV_intersection_gdf.shp")
 
 
-
-
-
-
-
-        # Create area_intersection and area_diff for respective layer 
-
-        x = 10
 
 

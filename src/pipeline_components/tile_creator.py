@@ -27,6 +27,7 @@ class TileCreator(object):
         self.E = 9.74158
         self.W = 5.59334
 
+
         self.polygon = polygon
 
     def defineTileCoords(self):

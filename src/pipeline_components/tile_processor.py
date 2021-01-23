@@ -12,6 +12,7 @@ from src.utils.polygon_creator import PolygonCreator
 from pathlib import Path
 import torch
 from torchvision import datasets, models, transforms, utils
+from torchvision.models.segmentation.deeplabv3 import DeepLabHead
 import csv
 import os
 import numpy as np
@@ -105,10 +106,14 @@ class TileProcessor(object):
 
     def __loadSegModel(self):
 
-        # Load DeepLab model from .pt file
-        seg_model = torch.load(self.seg_checkpoint_path, map_location=self.device)
+        seg_model = models.segmentation.deeplabv3_resnet101(pretrained=True, progress=True)
 
-        # Put model into inference mode
+        seg_model.classifier = DeepLabHead(2048, 1)
+
+        checkpoint = torch.load(self.seg_checkpoint_path, map_location=self.device)
+
+        seg_model.load_state_dict(checkpoint['model_state_dict'])
+
         seg_model.eval()
 
         return seg_model
@@ -342,18 +347,19 @@ class TileProcessor(object):
             currentTile = batch[0]
 
             # Try to process and record it
-            try:
+            # try:
 
-                self.__processTiles(currentTile, trans_cls, trans_seg)
+            self.__processTiles(currentTile, trans_cls, trans_seg)
 
-                with open(Path(self.processed_path), "a") as csvFile:
+            with open(Path(self.processed_path), "a") as csvFile:
 
-                    writer = csv.writer(csvFile, lineterminator="\n")
+                writer = csv.writer(csvFile, lineterminator="\n")
 
-                    writer.writerow([currentTile])
+                writer.writerow([currentTile])
 
             # Only tiles that weren't fully processed are saved subsequently
             # ToDo: Catch the exception and write it in a second column in the .csv
+            '''
             except:
 
                 e = sys.exc_info()[0]
@@ -364,7 +370,7 @@ class TileProcessor(object):
                     writer = csv.writer(csvFile, lineterminator="\n")
 
                     writer.writerow([currentTile, e])
-
+            '''
             # Delete iterated tile
             os.remove(Path(self.tile_dir + "/" + str(currentTile)))
 

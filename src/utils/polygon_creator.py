@@ -18,11 +18,10 @@ class PolygonCreator():
     def _deltapx2latlon(self, px_distance):
 
         dist_px_x, dist_px_y = px_distance
-        lat_max, lon_min = self.upper_left_coords
-        lat_new = lat_max - (self.dlat * (dist_px_y/self.size))
-        lon_new = lon_min + (((self.side * 360) / (2 * np.pi * self.earth_radius * np.cos(np.deg2rad(lat_new))))) * (dist_px_x/self.size)
-
-        return (lat_new, lon_new)
+        x_min, y_max = self.upper_left_coords
+        y_new = y_max + (self.side / self.size) * (dist_px_y - 0.5) * (self.dlat / self.side)
+        x_new = x_min + (self.side / self.size) * (dist_px_x - 0.5) * 360 * (1 / (2 * np.pi * self.earth_radius * np.cos(np.deg2rad(y_new))))
+        return (x_new, y_new)
 
     def _polygon2latlon(self, poly_exterior_coords):
 
@@ -40,7 +39,7 @@ class PolygonCreator():
         geos = gpd.GeoDataFrame()
         geos['class'] = None
         geos['geometry'] = None
-        for idx, (shape, value) in enumerate(raster.shapes(mask)):
+        for idx, (shape, value) in enumerate(raster.shapes(mask, transform = (1.0, 0.0, 0.0, 0.0, -1.0, 0.0))):
             polygon = Polygon(shape["coordinates"][0])
             poly_exterior_coords = list(polygon.exterior.coords)
             polygon_latlon = self._polygon2latlon(poly_exterior_coords)
