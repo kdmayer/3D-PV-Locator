@@ -11,18 +11,9 @@ run_tile_coords_updater: 0
 
 run_registry_creator: 1
 
-# -------- Pipeline Configuration --------
-# Classification threshold
-cls_threshold: 0.68
-
-# Segmentation threshold:
-seg_threshold: 0.55
-
-# Input resolution for CNN, is fixed for Inception-v3
-input_size: 299
-
-# Batch size should be as large as possible to speed up the classification process
-batch_size: 10
+# -------- Geocoder --------
+# Your Bing API key to geocode addresses
+bing_key: Your_API_Key
 
 # -------- Data --------
 # DIR where tiles are saved
@@ -53,9 +44,22 @@ not_downloaded_path: logs/downloading/notDownloadedTiles.csv
 # Path to geojson for all German states
 geojson_path: data/deutschlandGeoJSON/2_bundeslaender/1_sehr_hoch.geojson
 
+# -------- Model Configuration --------
+# Classification threshold
+cls_threshold: 0.68
+
+# Segmentation threshold:
+seg_threshold: 0.55
+
+# Input resolution for CNN, is fixed for Inception-v3
+input_size: 299
+
+# Batch size should be as large as possible to speed up the classification process
+batch_size: 10
+
 # -------- Model Checkpoint --------
 # Path for loading classification model weights
 cls_checkpoint_path: models/classification/cls_bz_8_lr_0.0001_ir_7_25.tar
 
 # Path for loading segmentation model weights
-seg_checkpoint_path: models/segmentation/weights_3_30epochs.pt
+seg_checkpoint_path: models/segmentation/deeplabv3_weights.tar
