@@ -1,11 +1,7 @@
 # Created by .ignore support plugin (hsz.mobi)
 .DS_Store
-models/classification/
-models/DeepSolar_GoogleMaps_classification.tar
-models/DeepSolar_openNRW_classification.tar
-models/segmentation/weights_3_30epochs.pt
-src/utils/__pycache__/polygon_creator.cpython-38.pyc
-src/pipeline_components/__pycache__/registry_creator.cpython-38.pyc
-.idea/PV4GER.iml
-.idea/misc.xml
-.idea/sonarlint/
+models
+*.pyc
+__pycache__
+.idea
+
