@@ -45,7 +45,7 @@ if __name__ == '__main__':
 
                 os.makedirs(destination, exist_ok=True)
 
-            print("Downloading the classification checkpoint ... This might take a while")
+            print(f"Downloading the classification checkpoint to {destination} ... This might take a while")
 
             download_file_from_google_drive(value, destination + '/inceptionv3_weigths.tar')
 
@@ -59,7 +59,7 @@ if __name__ == '__main__':
 
                 os.makedirs(destination, exist_ok=True)
 
-            print("Downloading the segmentation checkpoint ... This might take a while")
+            print(f"Downloading the segmentation checkpoint to {destination} ... This might take a while")
 
             download_file_from_google_drive(value, destination + '/deeplabv3_weights.tar')
 
