@@ -13,8 +13,6 @@ class RegistryCreator():
 
     def __init__(self, configuration):
 
-        '''
-
         # Load PV database file and convert it to a Geopandas.GeoDataFrame with EPSG:4326 as the coordinate reference system
         PV_db = pd.read_csv(configuration['pv_db_path'], sep=';', header=None, names=['Current_Tile_240', 'UL_Image_16', 'geometry'])
 
@@ -27,8 +25,6 @@ class RegistryCreator():
 
         self.rooftop_gdf = gpd.read_file(configuration['rooftop_polygon_path'])
         self.rooftop_gdf.crs = {"init": "epsg:4326"}
-
-        '''
 
         self.bing_key = configuration['bing_key']
 
@@ -193,18 +189,21 @@ class RegistryCreator():
 
         self.PV_intersection_gdf['Street_Address'] = self.PV_intersection_gdf['Street'] + ' ' + self.PV_intersection_gdf['StreetNumb']
 
+        # Identify best possible groupby by performing a groupby and deleting all erroneous entries before conducting a second groupby
+
         # Group intersection by polygon identifier and sum percentage
         self.group_intersection_id = self.PV_intersection_gdf.groupby("identifier").agg({'area_inter':'sum', 'Street':'first', 'Street_Address':'first',
                                                             'raw_area':'first', 'City':'first', 'PostalCode':'first',
                                                             'percentage_intersect':'sum'})
 
-        # find all polygons, which are fully intersected with a rooftop
+        # Find erroneous polygons whose area after intersection is larger than their original (raw) area
         polygone = self.group_intersection_id[self.group_intersection_id['percentage_intersect'] > 1.1].index.tolist()
 
-        # filter polygons, which are fully assigned to rooftop
+        # Filter out erroneous polygons identified above and all their respective sub-parts
         self.PV_intersection_gdf = self.PV_intersection_gdf.drop(self.PV_intersection_gdf.index[(self.PV_intersection_gdf['identifier'].isin(polygone))
                                                                 & (self.PV_intersection_gdf['percentage_intersect'] < 1)])
 
+        # Drop duplicate identifiers for erroneous polygons
         self.PV_intersection_gdf = self.PV_intersection_gdf.drop(
             self.PV_intersection_gdf.index[(self.PV_intersection_gdf['identifier'].isin(polygone))
                                            & (self.PV_intersection_gdf['identifier'].duplicated())])
@@ -215,7 +214,10 @@ class RegistryCreator():
                                                             'percentage_intersect':'sum'})
 
         # Clip tilts to account for incorrect geometries
-        self.PV_intersection_gdf['Tilt'][self.PV_intersection_gdf['Tilt'] >= 45] = 30
+        # Two assumptions feed into these lines:
+        # 1. Rooftop tilts larger than 50 degrees are unrealistic and likely due to erroneous data. We set them to a standard tilt of 30 degrees
+        # 2. PV panels are tilted in the same way as their underlying rooftop. On flat roofs, we assume a tilt angle of 30 degrees
+        self.PV_intersection_gdf['Tilt'][self.PV_intersection_gdf['Tilt'] >= 50] = 30
         self.PV_intersection_gdf['Tilt'][self.PV_intersection_gdf['Tilt'] == 0] = 30
 
         # Calculate corrected area by considering a rooftop's tilt
@@ -247,7 +249,7 @@ class RegistryCreator():
 
     def _load_layers(self):
 
-        #self.rooftops_gdf = gpd.read_file('/Users/kevin/desktop/deleteme/' + 'initial_rooftops.shp', encoding = 'utf8')
+        self.rooftops_gdf = gpd.read_file('/Users/kevin/desktop/deleteme/' + 'initial_rooftops.shp', encoding = 'utf8')
 
         self.PV_gdf = gpd.read_file('/Users/kevin/desktop/deleteme/' + 'PVs_gdf_merge_splitted.shp', encoding = 'utf8')
 
@@ -257,25 +259,21 @@ class RegistryCreator():
 
     def run(self):
 
-        '''
-
-        self.PV_gdf.to_file(driver='ESRI Shapefile', filename="/Users/kevin/desktop/deleteme/PVs_gdf_initial.shp")
+        #self.PV_gdf.to_file(driver='ESRI Shapefile', filename="/Users/kevin/desktop/deleteme/PVs_gdf_initial.shp")
 
         self._dissolve_raw_PVs()
 
-        self.rooftop_gdf.to_file(driver='ESRI Shapefile', filename="/Users/kevin/desktop/deleteme/initial_rooftops.shp")
+        #self.rooftop_gdf.to_file(driver='ESRI Shapefile', filename="/Users/kevin/desktop/deleteme/initial_rooftops.shp")
 
-        self.PV_gdf.to_file(driver='ESRI Shapefile', filename="/Users/kevin/desktop/deleteme/PVs_gdf_merge_splitted.shp")
+        #self.PV_gdf.to_file(driver='ESRI Shapefile', filename="/Users/kevin/desktop/deleteme/PVs_gdf_merge_splitted.shp")
 
         self._overlay_ops()
 
-        self.PV_diff_gdf.to_file(driver='ESRI Shapefile', filename="/Users/kevin/desktop/deleteme/PV_diff_gdf.shp")
+        #self.PV_diff_gdf.to_file(driver='ESRI Shapefile', filename="/Users/kevin/desktop/deleteme/PV_diff_gdf.shp")
 
-        self.PV_intersection_gdf.to_file(driver='ESRI Shapefile', filename="/Users/kevin/desktop/deleteme/PV_intersection_gdf.shp")
+        #self.PV_intersection_gdf.to_file(driver='ESRI Shapefile', filename="/Users/kevin/desktop/deleteme/PV_intersection_gdf.shp")
 
-        '''
-
-        self._load_layers()
+        #self._load_layers()
 
         self._append_diff2intersect()
 
@@ -285,12 +283,15 @@ class RegistryCreator():
 
         #self.registry.to_file(driver='ESRI Shapefile', filename="/Users/kevin/desktop/deleteme/registry.shp")
 
-        #ToDO: Clarify Questions
+        #ToDo:
         '''
-        1. Is it the expected behavior that the geometry feature PV_intersectionplusdiff_gdf only shows the intersected part?
-        2. Please explain the tilt clipping in line 218/219
+        1. Is it the expected behavior that the geometry feature PV_intersectionplusdiff_gdf only shows the intersected part? It's on purpose
+        2. Please explain the tilt clipping in line 218/219. Done
         3. How can percentage intersect be larger than 1.0 (line 202)? In my case it is even as large as 2 to 3?!
-        4. What do the points in self.registry stand for?
+        4. What do the points in self.registry stand for? They are the geo-coded street addresses
+        5. Why do we need a geocoder if all the polygons are geo-referenced? For consistency reasons and in order to match the MaStR addresses with the automated pv registry street address
+        6. Add public GoogleDrive Account with read-only access to share shapefiles, model checkpoints, and datasets
+        7. Add a city or county variable in the config.yml and automate the download process
         '''
 
 
