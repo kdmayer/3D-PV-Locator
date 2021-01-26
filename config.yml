@@ -59,7 +59,7 @@ batch_size: 10
 
 # -------- Model Checkpoint --------
 # Path for loading classification model weights
-cls_checkpoint_path: models/classification/cls_bz_8_lr_0.0001_ir_7_25.tar
+cls_checkpoint_path: models/classification/inceptionv3_weights.tar
 
 # Path for loading segmentation model weights
 seg_checkpoint_path: models/segmentation/deeplabv3_weights.tar
