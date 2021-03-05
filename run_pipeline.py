@@ -26,15 +26,20 @@ def main():
     run_tile_processor = conf.get('run_tile_processor', 0)
     run_tile_updater = conf.get('run_tile_coords_updater', 0)
     run_registry_creator = conf.get('run_registry_creator', 0)
+
     tile_coords_path = conf.get('tile_coords_path', 'data/coords/TileCoords.pickle')
-    geojson_path = conf.get('geojson_path', 'utils/deutschlandGeoJSON/2_bundeslaender/1_sehr_hoch.geo.json')
+    german_states_path = conf.get('german_states_path', 'utils/deutschlandGeoJSON/2_bundeslaender/1_sehr_hoch.geo.json')
     downloaded_path = conf.get('downloaded_path', 'logs/processing/DownloadedTiles.csv')
     processed_path = conf.get('processed_path','logs/processing/Processed.csv')
+
+    # Todo: Do the set up for your repo here
+    # 1. Use the county variable to filter through tile_coords, only picking those within the county
+    # 2. Use the county variable to download the respective rooftop polygons file from AWS S3
 
 
     # ------- GeoJsonHandler provides utility functions -------
 
-    nrw_handler = GeoJsonHandler(geojson_path)
+    nrw_handler = GeoJsonHandler(german_states_path)
 
     # ------- TileCreator creates pickle file with all tiles in NRW and their respective minx, miny, maxx, maxy coordinates -------
 

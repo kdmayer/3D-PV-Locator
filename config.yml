@@ -13,7 +13,11 @@ run_registry_creator: 1
 
 # -------- Geocoder --------
 # Your Bing API key to geocode addresses
-bing_key: Your_API_Key
+bing_key: AnezE22PWOJH1oOhcQfolc6zSaDrNxfHIgJ8BQ3bh8dH1dovu4UOhSgrRpQIj26J
+
+# -------- Area of interest --------
+# Specify the county for which you would like to run the analysis by name.
+county: Essen
 
 # -------- Data --------
 # DIR where tiles are saved
@@ -23,7 +27,7 @@ tile_dir: data/tiles
 tile_coords_path: data/coords/Essen.pickle
 
 # Path to shapefile containing rooftop polygons:
-rooftop_polygon_path: data/rooftop_polygons/valid_polygon_Essen.shp
+rooftop_polygon_path: data/rooftop_polygons/Essen.geojson
 
 # Path to csv where PV locations are stored
 pv_db_path: data/pv_database/PV_db.csv
@@ -42,7 +46,7 @@ downloaded_path: logs/downloading/DownloadedTiles.csv
 not_downloaded_path: logs/downloading/notDownloadedTiles.csv
 
 # Path to geojson for all German states
-geojson_path: data/deutschlandGeoJSON/2_bundeslaender/1_sehr_hoch.geojson
+german_states_path: data/deutschlandGeoJSON/2_bundeslaender/1_sehr_hoch.geojson
 
 # -------- Model Configuration --------
 # Classification threshold
