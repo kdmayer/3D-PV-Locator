@@ -15,6 +15,19 @@ For a detailed description of the underlying pipeline and a case study for the c
     git clone https://github.com/kdmayer/PV4GER.git
     cd PV4GER
 
+Download pre-trained classification and segmentation models for PV systems from our public AWS S3 bucket. This bucket is in "requester pays" mode, which means that you need to configure your AWS CLI before being able to download the files. Once you have configured your AWS CLI, you can list and browse the bucket with
+
+    aws s3 ls --request-payer requester s3://pv4ger/
+    
+and download files by 
+
+    aws s3 cp --request-payer requester s3://pv4ger/demo/demo_image.png .
+    
+Set up your conda environment with all required dependencies
+
+    conda create --name PV4GER --file requirements.txt
+
+
 
 ## OpenNRW Platform:
 
