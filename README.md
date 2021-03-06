@@ -1,11 +1,20 @@
-## About:
+#PV4GER
 
-Repo for "DeepSolar for Germany" 
+Repo for "An Enriched Automated PV Registry: Combining Image Recognition and 3D Building Data"
 
-- *Pipeline* to process more than 133 million aerial images from Germany's most populous state NRW in order to locate PV systems
-- *Google Maps-based model (PyTorch)* achieves precision and recall scores of 92% and 98% on imagery with a spatial resolution of 5 cm/pixel
-- *OpenNRW-based model (PyTorch)* achieves precision and recall scores of 64% and 87% on imagery with a spatial resolution of 10 cm/pixel
-- [Paper](https://ieeexplore.ieee.org/document/9203258)
+PV4GER aims at democratizing and accelerating the access to photovoltaic (PV) systems data in Germany and beyond. To do so, we have developed a computer vision-based pipeline which leverages 3D building data to automatically create address-level PV registries for all counties within Germany's most populous state North Rhine-Westphalia.
+
+For a detailed description of the underlying pipeline and a case study for the city of Bottrop, please have a look at our spotlight talk at NeurIPS 2020:
+
+- [Paper](https://www.climatechange.ai/papers/neurips2020/46/paper.pdf)
+- [Slides](https://www.climatechange.ai/papers/neurips2020/46/slides.pdf)
+- [Recorded Talk](https://slideslive.com/38942134/an-enriched-automated-pv-registry-combining-image-recognition-and-3d-building-data)
+
+## Usage Instructions:
+
+    git clone https://github.com/kdmayer/PV4GER.git
+    cd PV4GER
+
 
 ## OpenNRW Platform:
 
