@@ -1,4 +1,5 @@
 import geopandas as gpd
+from pathlib import Path
 import numpy as np
 import pandas as pd
 from shapely import wkt
@@ -13,8 +14,10 @@ class RegistryCreator():
 
     def __init__(self, configuration):
 
+        self.county = configuration.get('county4analysis')
+
         # Load PV database file and convert it to a Geopandas.GeoDataFrame with EPSG:4326 as the coordinate reference system
-        PV_db = pd.read_csv(configuration['pv_db_path'], sep=';', header=None, names=['Current_Tile_240', 'UL_Image_16', 'geometry'])
+        PV_db = pd.read_csv(Path(f"data/pv_database/{self.county}_PV_db.csv"), sep=';', header=None, names=['Current_Tile_240', 'UL_Image_16', 'geometry'])
 
         PV_db['geometry'] = PV_db['geometry'].apply(wkt.loads)
 
@@ -23,7 +26,7 @@ class RegistryCreator():
         self.PV_gdf['class'] = int(1)
         self.PV_gdf = self.PV_gdf[['class', 'geometry']]
 
-        self.rooftop_gdf = gpd.read_file(configuration['rooftop_polygon_path'])
+        self.rooftop_gdf = gpd.read_file(Path(f"{configuration['rooftop_data_dir']}/{self.county}.geojson"))
         self.rooftop_gdf.crs = {"init": "epsg:4326"}
 
         self.bing_key = configuration['bing_key']
@@ -53,7 +56,6 @@ class RegistryCreator():
         self.PV_diff_gdf = gpd.overlay(self.PV_gdf, self.rooftop_gdf, how="difference")
 
     def _ckdnearest(self, gdA, gdB):
-
         """
         finds nearest points of GeoPandas.DataFrame gdB in GeoPandas.DataFrame gdA
         please be sure that the index is resorted before using this function as it is using
@@ -247,41 +249,17 @@ class RegistryCreator():
 
         self.registry = gpd.GeoDataFrame(self.registry)
 
-    def _load_layers(self):
-
-        self.rooftops_gdf = gpd.read_file('/Users/kevin/desktop/deleteme/' + 'initial_rooftops.shp', encoding = 'utf8')
-
-        self.PV_gdf = gpd.read_file('/Users/kevin/desktop/deleteme/' + 'PVs_gdf_merge_splitted.shp', encoding = 'utf8')
-
-        self.PV_intersection_gdf = gpd.read_file('/Users/kevin/desktop/deleteme/' + 'PV_intersection_gdf.shp', encoding='utf8')
-
-        self.PV_diff_gdf = gpd.read_file('/Users/kevin/desktop/deleteme/' + 'PV_diff_gdf.shp', encoding='utf8')
-
     def run(self):
-
-        #self.PV_gdf.to_file(driver='ESRI Shapefile', filename="/Users/kevin/desktop/deleteme/PVs_gdf_initial.shp")
 
         self._dissolve_raw_PVs()
 
-        #self.rooftop_gdf.to_file(driver='ESRI Shapefile', filename="/Users/kevin/desktop/deleteme/initial_rooftops.shp")
-
-        #self.PV_gdf.to_file(driver='ESRI Shapefile', filename="/Users/kevin/desktop/deleteme/PVs_gdf_merge_splitted.shp")
-
         self._overlay_ops()
-
-        #self.PV_diff_gdf.to_file(driver='ESRI Shapefile', filename="/Users/kevin/desktop/deleteme/PV_diff_gdf.shp")
-
-        #self.PV_intersection_gdf.to_file(driver='ESRI Shapefile', filename="/Users/kevin/desktop/deleteme/PV_intersection_gdf.shp")
-
-        #self._load_layers()
 
         self._append_diff2intersect()
 
         self._create_registry()
 
-        #self.PV_intersection_gdf.to_file(driver='ESRI Shapefile', filename="/Users/kevin/desktop/deleteme/PV_intersectionplusdiff_gdf.shp")
-
-        #self.registry.to_file(driver='ESRI Shapefile', filename="/Users/kevin/desktop/deleteme/registry.shp")
+        self.registry.to_file(driver='GeoJSON', filename=f"data/pv_registry/{self.county}_registry.geojson")
 
         #ToDo:
         '''

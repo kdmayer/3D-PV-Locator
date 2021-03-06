@@ -26,7 +26,6 @@ from src.dataset.dataset import NrwDataset
 import sys
 
 # Todo: Modularize __processTiles() by writing separate functions for classifying and segmenting a batch
-
 class TileProcessor(object):
 
     def __init__(self, configuration, polygon):
@@ -52,11 +51,11 @@ class TileProcessor(object):
         self.tile_dir = configuration['tile_dir']
 
         # ------ Specify required output directories ------
-        self.pv_db_path = configuration['pv_db_path']
+        self.pv_db_path = Path(f"data/pv_database/{configuration.get('county4analysis')}_PV_db.csv")
 
-        self.processed_path = configuration['processed_path']
+        self.processed_path = Path(f"logs/processing/{configuration.get('county4analysis')}_processedTiles.csv")
 
-        self.not_processed_path = configuration['not_processed_path']
+        self.not_processed_path = Path(f"logs/processing/{configuration.get('county4analysis')}_notProcessedTiles.csv")
 
         # ------ Load model and dataset ------
         self.cls_model = self.__loadClsModel()
@@ -126,7 +125,7 @@ class TileProcessor(object):
         maxy = float(maxy)
 
         # Takes a 4800x4800 image tile and returns a list of 320x320 pixel images, if they are within
-        # the NRW polygon
+        # the county polygon
 
         tile = np.array(tile)
 
@@ -164,14 +163,14 @@ class TileProcessor(object):
 
             y_coord = y_coord - self.dlat
 
-        # A boolean vector of length 225 indicating whether an image's upper left coordinate is within the NRW polygon
+        # A boolean vector of length 225 indicating whether an image's upper left coordinate is within the county polygon
         coords_boolean = [self.polygon.intersects(Point(elem)) for elem in coords]
 
         # A list containing all images from the current tile that lie within NRW
-        imagesInNRW = list(compress(images, coords_boolean))
-        coordsInNRW = list(compress(coords, coords_boolean))
+        images_in_polygon = list(compress(images, coords_boolean))
+        coords_in_polygon = list(compress(coords, coords_boolean))
 
-        return coordsInNRW, imagesInNRW
+        return coords_in_polygon, images_in_polygon
 
     def __processTiles(self, currentTile, trans_cls, trans_seg):
 
@@ -267,8 +266,8 @@ class TileProcessor(object):
                                                      'PV_polygon': row['geometry']})
 
             # Repeat process for last batch
-            img_batch = images[self.batch_size * i:self.batch_size * (i + 1)]
-            coords4batch = coords[self.batch_size * i:self.batch_size * (i + 1)]
+            img_batch = images[self.batch_size * k:]
+            coords4batch = coords[self.batch_size * k:]
 
             batch4cls = [torch.unsqueeze(trans_cls(Image.fromarray(image)), 0) for image in img_batch]
             batch4seg = [torch.unsqueeze(trans_seg(Image.fromarray(image)), 0) for image in img_batch]

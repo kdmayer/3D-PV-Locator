@@ -9,9 +9,11 @@ class TileCoordsUpdater(object):
 
         self.old_tile_coords = tile_coords
 
-        self.tile_coords_path = configuration['tile_coords_path']
+        self.county = configuration['county4analysis']
 
-        self.processed_path = configuration['processed_path']
+        self.tile_coords_path = Path(f"data/coords/{self.county}.pickle")
+
+        self.processed_path = Path(f"logs/processing/{self.county}_processedTiles.csv")
 
     def update(self):
 
@@ -48,7 +50,7 @@ class TileCoordsUpdater(object):
                 f"Old list of tiles contained {len(self.old_tile_coords)} elements. New list contains {len(new_Tile_coords)}")
 
             print(
-                f"Successfully updated TileCoords.pickle by removing {len(self.old_tile_coords) - len(new_Tile_coords)} tiles.")
+                f"Successfully updated {self.county}.pickle by removing {len(self.old_tile_coords) - len(new_Tile_coords)} tiles.")
 
             # Save the new Tile_coords.pickle file
             with open(Path(self.tile_coords_path), 'wb') as f:

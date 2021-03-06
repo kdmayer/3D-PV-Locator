@@ -13,40 +13,21 @@ run_registry_creator: 1
 
 # -------- Geocoder --------
 # Your Bing API key to geocode addresses
-bing_key: AnezE22PWOJH1oOhcQfolc6zSaDrNxfHIgJ8BQ3bh8dH1dovu4UOhSgrRpQIj26J
+bing_key:
 
 # -------- Area of interest --------
-# Specify the county for which you would like to run the analysis by name.
-county: Essen
+# Specify the county for which you would like to run the analysis
+county4analysis: Essen
 
 # -------- Data --------
+# Geo-referenced polygon data for all counties in NRW
+nrw_county_data_path: data/nrw_county_data/nrw_counties.geojson
+
 # DIR where tiles are saved
 tile_dir: data/tiles
 
-# Path where pickle with tile coordinates is saved
-tile_coords_path: data/coords/Essen.pickle
-
-# Path to shapefile containing rooftop polygons:
-rooftop_polygon_path: data/rooftop_polygons/Essen.geojson
-
-# Path to csv where PV locations are stored
-pv_db_path: data/pv_database/PV_db.csv
-
-# Path to csv which lists all completely processed tiles
-processed_path: logs/processing/Processed.csv
-
-# Path to csv which lists all tiles where processing went wrong
-not_processed_path: logs/processing/notProcessed.csv
-
-# Path to csv which lists all downloaded tiles
-# Only fully downloaded tiles are stored here
-downloaded_path: logs/downloading/DownloadedTiles.csv
-
-# Path to csv which lists all tiles where downloading went wrong
-not_downloaded_path: logs/downloading/notDownloadedTiles.csv
-
-# Path to geojson for all German states
-german_states_path: data/deutschlandGeoJSON/2_bundeslaender/1_sehr_hoch.geojson
+# Path to rooftop data file for
+rooftop_data_dir: data/nrw_rooftop_data/
 
 # -------- Model Configuration --------
 # Classification threshold
