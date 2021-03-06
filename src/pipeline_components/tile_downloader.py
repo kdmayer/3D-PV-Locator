@@ -10,7 +10,7 @@ import requests
 from pathlib import Path
 
 
-# This script makes requests to the open NRW web server in order to download geospatial tile imagery.
+# This script makes requests to the openNRW web server in order to download tiles of aerial imagery
 
 class TileDownloader(object):
 
@@ -22,9 +22,9 @@ class TileDownloader(object):
 
         self.tile_dir = configuration['tile_dir']
 
-        self.downloaded_path = configuration['downloaded_path']
+        self.downloaded_path = Path(f"logs/downloading/{configuration.get('county4analysis')}_downloadedTiles.csv")
 
-        self.not_downloaded_path = configuration['not_downloaded_path']
+        self.not_downloaded_path = Path(f"logs/downloading/{configuration.get('county4analysis')}_notDownloadedTiles.csv")
 
         # URL dummy for image request from open NRW server
         self.WMS_1 = 'https://www.wms.nrw.de/geobasis/wms_nw_dop?SERVICE=WMS&REQUEST=GetMap&Version=1.1.1&LAYERS=nw_dop_rgb&SRS=EPSG:4326&BBOX='
@@ -52,9 +52,9 @@ class TileDownloader(object):
 
     def download(self, Tile_coords, threadCounter):
 
-        # Only tiles where at least one corner is within the NRW polygon
+        # Only tiles where at least one corner is within the polygon
         # will be downloaded. In a second step, i.e. when splitting the tiles, only those images will be processed
-        # where the centerpoint lies within the NRW polygon.
+        # where the centerpoint lies within the polygon.
 
         # Tile_coords is a list of tuples. Each tuple specifies its respective tile by minx, miny, maxx, maxy
         for index, tile in enumerate(Tile_coords):

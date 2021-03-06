@@ -1,57 +1,24 @@
 import json
 from itertools import chain
+import geopandas as gpd
 from shapely.geometry import Polygon, MultiPolygon
 import pickle
 
 class GeoJsonHandler(object):
 
-    def __init__(self, input_dir, name="Nordrhein-Westfalen"):
+    def __init__(self, nrw_county_data_path, selected_county):
 
-        self.geojson_dir = input_dir
+        nrw_county_gdf = gpd.read_file(nrw_county_data_path)
 
-        with open(self.geojson_dir) as f:
+        single_county_gdf = nrw_county_gdf[nrw_county_gdf['GN'] == selected_county].reset_index(drop=True)
 
-            self.data = json.load(f)
+        self.polygon = single_county_gdf.loc[0, 'geometry']
 
-        self.polygon = self.definePolygon(name)
+        self.name = selected_county
 
-    def definePolygon(self, name):
+    def returnTileCoords(self):
 
-        # name should either be "Nordrhein-Westfalen" which is the overall state we are analyzing OR a single county within that state
-        if name == "Nordrhein-Westfalen":
-
-            # Load geojson for all German states and select NRW
-            for feature in self.data['features']:
-
-                if name == "Nordrhein-Westfalen":
-
-                    # Select the state of NRW
-                    if feature['properties']['NAME_1'] == "Nordrhein-Westfalen":
-                        # list containing all NRW coordinates
-                        coords = feature['geometry']['coordinates']
-
-        else:
-
-            for feature in self.data['features']:
-
-                if feature["properties"]['NAME_3'] == name:
-
-                    coords = feature['geometry']['coordinates']
-
-        # Unlist coords
-        coords = list(chain(*coords))
-
-        coords_tuples = [tuple(elem) for elem in coords]
-
-        # It is a closed polygon
-        # TODO add assert statement to verify that it is a closed polygon
-        polygon = Polygon(coords_tuples)
-
-        return polygon
-
-    def returnTileCoords(self, path_to_pickle):
-
-        with open(path_to_pickle, "rb") as f:
+        with open(f"data/coords/{self.name}.pickle", "rb") as f:
 
             Tile_coords = pickle.load(f)
 

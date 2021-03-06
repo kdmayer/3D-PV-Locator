@@ -26,30 +26,34 @@ def main():
     run_tile_processor = conf.get('run_tile_processor', 0)
     run_tile_updater = conf.get('run_tile_coords_updater', 0)
     run_registry_creator = conf.get('run_registry_creator', 0)
-    tile_coords_path = conf.get('tile_coords_path', 'data/coords/TileCoords.pickle')
-    geojson_path = conf.get('geojson_path', 'utils/deutschlandGeoJSON/2_bundeslaender/1_sehr_hoch.geo.json')
-    downloaded_path = conf.get('downloaded_path', 'logs/processing/DownloadedTiles.csv')
-    processed_path = conf.get('processed_path','logs/processing/Processed.csv')
 
+    # Todo: Do the set up for your repo here
+    # 1. Use the county variable to only select tiles which lie within your selected county
+    # 2. Use the county variable to download the respective rooftop polygons file from AWS S3
+
+    county4analysis = conf.get('county4analysis', 'Essen')
+    nrw_county_data_path = conf.get('nrw_county_data_path', 'data/nrw_county_data/nrw_counties.geojson')
+    downloaded_path = Path(f"logs/downloading/{county4analysis}_downloadedTiles.csv")
+    processed_path = Path(f"logs/processing/{county4analysis}_processedTiles.csv")
 
     # ------- GeoJsonHandler provides utility functions -------
 
-    nrw_handler = GeoJsonHandler(geojson_path)
+    county_handler = GeoJsonHandler(nrw_county_data_path, county4analysis)
 
     # ------- TileCreator creates pickle file with all tiles in NRW and their respective minx, miny, maxx, maxy coordinates -------
 
     if run_tile_creator:
 
-        print("Starting to create a pickle file with all bounding box coordinates for tiles within NRW ... This will take a while")
+        print("Starting to create a pickle file with the bounding box coordinates for all tiles within your selected county ... This will take a while")
 
-        tileCreator = TileCreator(configuration=conf, polygon=nrw_handler.polygon)
+        tileCreator = TileCreator(county_handler=county_handler)
 
         tileCreator.defineTileCoords()
 
         print('Pickle file has been sucessfully created')
 
     # Tile_coords is a list of tuples. Each tuple specifies its respective tile by minx, miny, maxx, maxy.
-    tile_coords = nrw_handler.returnTileCoords(path_to_pickle=Path(tile_coords_path))
+    tile_coords = county_handler.returnTileCoords()
 
     print(f'{len(tile_coords)} tiles have been identified.')
 
@@ -59,7 +63,7 @@ def main():
 
         print('Starting to download ' + str(len(tile_coords)) + '. This will take a while.')
 
-        downloader = TileDownloader(configuration=conf, polygon=nrw_handler.polygon, tile_coords=tile_coords)
+        downloader = TileDownloader(configuration=conf, polygon=county_handler.polygon, tile_coords=tile_coords)
 
     if os.path.exists(Path(downloaded_path)):
 
@@ -70,7 +74,7 @@ def main():
 
     if run_tile_processor:
 
-        tileProcessor = TileProcessor(configuration=conf, polygon=nrw_handler.polygon)
+        tileProcessor = TileProcessor(configuration=conf, polygon=county_handler.polygon)
 
         tileProcessor.run()
 

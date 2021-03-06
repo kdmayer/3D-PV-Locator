@@ -7,13 +7,14 @@ Created on Fri Jun 28 11:07:41 2019
 import numpy as np
 import pickle
 from shapely.geometry import Point
+from pathlib import Path
 
 
 class TileCreator(object):
 
-    def __init__(self, configuration, polygon):
+    def __init__(self, county_handler):
 
-        self.output_path = configuration['tile_coords_path']
+        self.output_path = Path(f"data/coords/{county_handler.name}.pickle")
 
        # Avg. earth radius in meters
         self.radius = 6371000
@@ -27,8 +28,7 @@ class TileCreator(object):
         self.E = 9.74158
         self.W = 5.59334
 
-
-        self.polygon = polygon
+        self.polygon = county_handler.polygon
 
     def defineTileCoords(self):
 
@@ -88,6 +88,6 @@ class TileCreator(object):
             # Update latitude value
             y = y + dlat
 
-        with open(self.output_path,'wb') as f:
+        with open(self.output_path, 'wb') as f:
 
             pickle.dump(Tile_coords, f)
