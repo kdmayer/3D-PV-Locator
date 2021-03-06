@@ -1,4 +1,4 @@
-#PV4GER
+# PV4GER
 
 Repo for "An Enriched Automated PV Registry: Combining Image Recognition and 3D Building Data"
 
