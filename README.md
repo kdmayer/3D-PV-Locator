@@ -1,6 +1,6 @@
 # PV4GER
 
-![Pipeline overview](https://github.com/kdmayer/PV4GER/pipeline_visualization.png)
+![Pipeline overview](https://github.com/kdmayer/PV4GER/blob/master/pipeline_visualization.png)
 
 Repo for "An Enriched Automated PV Registry: Combining Image Recognition and 3D Building Data"
 
