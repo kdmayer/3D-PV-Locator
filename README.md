@@ -1,5 +1,7 @@
 # PV4GER
 
+![Pipeline overview](https://github.com/kdmayer/PV4GER/pipeline_visualization.png)
+
 Repo for "An Enriched Automated PV Registry: Combining Image Recognition and 3D Building Data"
 
 PV4GER aims at democratizing and accelerating the access to photovoltaic (PV) systems data in Germany and beyond. To do so, we have developed a computer vision-based pipeline which leverages 3D building data to automatically create address-level PV registries for all counties within Germany's most populous state North Rhine-Westphalia.
