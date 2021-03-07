@@ -1,5 +1,14 @@
 # Configuration
 
+# -------- Geocoder --------
+# Your Bing API key to geocode addresses
+bing_key: <YOUR_BING_API_KEY>
+
+# -------- Area of interest --------
+# Specify the county for which you would like to run the analysis
+county4analysis: <YOUR_DESIRED_COUNTY>
+
+# -------- Pipeline --------
 # Which part of the pipeline do you want to execute?
 run_tile_creator: 0
 
@@ -9,15 +18,7 @@ run_tile_processor: 0
 
 run_tile_coords_updater: 0
 
-run_registry_creator: 1
-
-# -------- Geocoder --------
-# Your Bing API key to geocode addresses
-bing_key:
-
-# -------- Area of interest --------
-# Specify the county for which you would like to run the analysis
-county4analysis: Essen
+run_registry_creator: 0
 
 # -------- Data --------
 # Geo-referenced polygon data for all counties in NRW
