@@ -1,5 +1,12 @@
 .DS_Store
-models
+data/coords/*.pickle
+data/rooftop_data/*.geojson
+data/pv_database/*.csv
+data/pv_registry/*.geojson
+logs/downloading/*.csv
+logs/processing/*.csv
+models/classification/inceptionv3_weights.tar
+models/segmentation/deeplabv3_weights.tar
 *.pyc
 __pycache__
 .idea
