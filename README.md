@@ -17,17 +17,45 @@ For a detailed description of the underlying pipeline and a case study for the c
     git clone https://github.com/kdmayer/PV4GER.git
     cd PV4GER
 
-Download pre-trained classification and segmentation models for PV systems from our public AWS S3 bucket. This bucket is in "requester pays" mode, which means that you need to configure your AWS CLI before being able to download the files. Once you have configured your AWS CLI, you can list and browse the bucket with
+Download pre-trained classification and segmentation models for PV systems from our public AWS S3 bucket. This bucket is in "requester pays" mode, which means that you need to configure your AWS CLI before being able to download the files. Instructions on how to do it can be found [here](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html).
+
+Once you have configured your AWS CLI, you can list and browse the bucket with
 
     aws s3 ls --request-payer requester s3://pv4ger/
     
-and download files by 
+Please download our pre-trained networks for PV system classification and segmentation by executing
 
-    aws s3 cp --request-payer requester s3://pv4ger/demo/demo_image.png .
+    aws s3 cp --request-payer requester s3://pv4ger/NRW_models/inceptionv3_weights.tar models/classification/
+    aws s3 cp --request-payer requester s3://pv4ger/NRW_models/deeplabv3_weights.tar models/segmentation/
     
-Set up your conda environment with all required dependencies
+Next, set up your conda environment with all required dependencies by executing
 
     conda create --name PV4GER --file requirements.txt
+    conda activate PV4GER
+    
+Lastly, to create PV registries for any county within North Rhine-Westphalia, you need to 
+
+1. Download the rooftop dataset for your desired county from our S3 bucket by executing and replacing <YOUR_DESIRED_COUNTY.geojson> 
+
+        aws s3 cp --request-payer requester s3://pv4ger/NRW_rooftop_data/<YOUR_DESIRED_COUNTY.geojson> data/nrw_rooftop_data/
+        
+    Example:
+    
+        aws s3 cp --request-payer requester s3://pv4ger/NRW_rooftop_data/Essen.geojson data/nrw_rooftop_data/
+     
+2. Obtain your Bing Maps API key for geocoding from [here](https://docs.microsoft.com/en-us/bingmaps/getting-started/bing-maps-dev-center-help/getting-a-bing-maps-key) and paste it in the config.yml file next to the "bing_key"
+
+    Example:
+    
+        bing_key: <YOUR_BING_KEY>
+
+3. Specify the name of your desired county for analysis in the config.yml next to the "county4analysis" tag
+
+    Example:
+        
+        county4analysis: Essen
+    
+
 
 
 
