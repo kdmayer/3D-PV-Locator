@@ -9,12 +9,39 @@ import shutil
 import requests
 from pathlib import Path
 
-
-# This script makes requests to the openNRW web server in order to download tiles of aerial imagery
-
 class TileDownloader(object):
+    """
+    Class to download tiles from the openNRW web server in a multi-threaded fashion.
+    
+    Attributes
+    ----------
+    tile_dir : str
+        Path to directory where all the downloaded tiles are saved.
+    downloaded_path : Path
+        Specifies the path to the document which saves all the tiles by their minx, miny, maxx, maxy coordinates which were successfully downloaded.
+    not_downloaded_path : Path
+        Specifies the path to the document which saves all the tiles by their minx, miny, maxx, maxy coordinates which were **not** successfully downloaded.
+    WMS_1 : str
+        Initial URL stub for requests to the openNRW server.
+    WMS_2 : str
+        Final URL stub for requests to the openNRW server.
+    NUM_THREADS : int
+        Number of threads used to simultaneously download tiles from the openNRW server. 
+    """
 
     def __init__(self, configuration, polygon, tile_coords):
+        """
+        Sets instance variables and starts donwloading process in a multi-threaded fashion
+        
+        Parameters
+        ----------
+        configuration : dict
+            config.yml in dict format.
+        polygon : shapely.geometry.polygon.Polygon
+            Geo-referenced polygon geometry for the selected county within NRW.
+        tile_coords : list
+            List of tuples where each tuple specifies its respective tile by minx, miny, maxx, maxy.
+        """
 
         self.polygon = polygon
 
@@ -51,12 +78,22 @@ class TileDownloader(object):
             t.join()
 
     def download(self, Tile_coords, threadCounter):
+        """
+        Download tiles from openNRW's web servers.
+        
+        Parameters
+        ----------
+        Tile_coords : list
+            List of tuples. Each tuple specifies its respective tile by minx, miny, maxx, maxy.
+        threadCounter : int
+            ID to distinguish between the different threads working in parallel.
 
-        # Only tiles where at least one corner is within the polygon
-        # will be downloaded. In a second step, i.e. when splitting the tiles, only those images will be processed
-        # where the centerpoint lies within the polygon.
 
-        # Tile_coords is a list of tuples. Each tuple specifies its respective tile by minx, miny, maxx, maxy
+        Returns
+        -------
+
+        """
+        
         for index, tile in enumerate(Tile_coords):
 
             if index % self.NUM_THREADS == threadCounter:

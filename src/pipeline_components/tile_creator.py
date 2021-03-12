@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri Jun 28 11:07:41 2019
-
 @author: Kevin
 """
 import numpy as np
@@ -11,15 +9,41 @@ from pathlib import Path
 
 
 class TileCreator(object):
+    """
+    Class to generate a list specifying all tiles within a given county by their minx, miny, maxx, maxy coordinates.
+
+    Attributes
+    ----------
+    output_path : Path
+        Path to the pickle file which will save the list with all tiles within the selected county.
+    radius : int
+        Earth radius in meters.
+    side : int
+        Side length in meters for the tiles.
+    N : float
+        Northern boundary for the tile coordinates.
+    S : float
+        Southern boundary for the tile coordinates.
+    E : float
+        Eastern boundary for the tile coordinates.
+    W : float
+        Western boundary for the tile coordinates.
+    polygon : shapely.geometry.polygon.Polygon 
+        Geo-referenced polygon geometry for the selected county within NRW.
+    """
 
     def __init__(self, county_handler):
+        """
+        Sets instance variables. 
+        
+        Parameters
+        ----------
+        county_handler : GeoJsonHandler
+            GeoJsonHandler instance which specifies the name and the geo-referenced polygon for a selected county within North Rhine-Westphalia (NRW).
 
+        """
         self.output_path = Path(f"data/coords/{county_handler.name}.pickle")
-
-       # Avg. earth radius in meters
         self.radius = 6371000
-
-        # Square side length of tiles in meters
         self.side = 240
 
         # Bounding box coordinates for NRW, i.e. North, South, East, West
@@ -31,6 +55,10 @@ class TileCreator(object):
         self.polygon = county_handler.polygon
 
     def defineTileCoords(self):
+        """
+        Spans a grid of tiles, each with a dimension 240m x 240m, over North Rhine-Westphalia and saves the tiles within the respective county by their minx, miny, maxx, maxy coordinates.
+        Only tiles where at least one corner is within the county's polygon will be downloaded.
+        """
 
         # dlat spans a distance of 'side' meters in north-south direction:
         # 1 degree in latitude direction spans (2*np.pi*r)/360° meters
