@@ -1,0 +1,205 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Welcome to PV4GER’s documentation! &#8212; PV4GER 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="welcome-to-pv4ger-s-documentation">
+<h1>Welcome to PV4GER’s documentation!<a class="headerlink" href="#welcome-to-pv4ger-s-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="documentation-for-the-code">
+<h2>Documentation for the Code<a class="headerlink" href="#documentation-for-the-code" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+</div>
+<div class="section" id="module-src.pipeline_components.tile_creator">
+<span id="tile-creator"></span><h1>Tile Creator<a class="headerlink" href="#module-src.pipeline_components.tile_creator" title="Permalink to this headline">¶</a></h1>
+<p>&#64;author: Kevin</p>
+<dl class="py class">
+<dt id="src.pipeline_components.tile_creator.TileCreator">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">src.pipeline_components.tile_creator.</span></code><code class="sig-name descname"><span class="pre">TileCreator</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">county_handler</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.pipeline_components.tile_creator.TileCreator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class to generate a list specifying all tiles within a given county by their minx, miny, maxx, maxy coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output_path</strong> (<em>Path</em>) – Path to the pickle file which will save the list with all tiles within the selected county.</p></li>
+<li><p><strong>radius</strong> (<em>int</em>) – Earth radius in meters.</p></li>
+<li><p><strong>side</strong> (<em>int</em>) – Side length in meters for the tiles.</p></li>
+<li><p><strong>N</strong> (<em>float</em>) – Northern boundary for the tile coordinates.</p></li>
+<li><p><strong>S</strong> (<em>float</em>) – Southern boundary for the tile coordinates.</p></li>
+<li><p><strong>E</strong> (<em>float</em>) – Eastern boundary for the tile coordinates.</p></li>
+<li><p><strong>W</strong> (<em>float</em>) – Western boundary for the tile coordinates.</p></li>
+<li><p><strong>polygon</strong> (<em>shapely.geometry.polygon.Polygon</em>) – Geo-referenced polygon geometry for the selected county within NRW.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="src.pipeline_components.tile_creator.TileCreator.__init__">
+<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">county_handler</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.pipeline_components.tile_creator.TileCreator.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets instance variables.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>county_handler</strong> (<em>GeoJsonHandler</em>) – GeoJsonHandler instance which specifies the name and the geo-referenced polygon for a selected county within North Rhine-Westphalia (NRW).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="src.pipeline_components.tile_creator.TileCreator.defineTileCoords">
+<code class="sig-name descname"><span class="pre">defineTileCoords</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.pipeline_components.tile_creator.TileCreator.defineTileCoords" title="Permalink to this definition">¶</a></dt>
+<dd><p>Spans a grid of tiles, each with a dimension 240m x 240m, over North Rhine-Westphalia and saves the tiles within the respective county by their minx, miny, maxx, maxy coordinates.
+Only tiles where at least one corner is within the county’s polygon will be downloaded.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.pipeline_components.tile_downloader">
+<span id="tile-downloader"></span><h1>Tile Downloader<a class="headerlink" href="#module-src.pipeline_components.tile_downloader" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="src.pipeline_components.tile_downloader.TileDownloader">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">src.pipeline_components.tile_downloader.</span></code><code class="sig-name descname"><span class="pre">TileDownloader</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">polygon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tile_coords</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.pipeline_components.tile_downloader.TileDownloader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class to download tiles from the openNRW web server in a multi-threaded fashion.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tile_dir</strong> (<em>str</em>) – Path to directory where all the downloaded tiles are saved.</p></li>
+<li><p><strong>downloaded_path</strong> (<em>Path</em>) – Specifies the path to the document which saves all the tiles by their minx, miny, maxx, maxy coordinates which were successfully downloaded.</p></li>
+<li><p><strong>not_downloaded_path</strong> (<em>Path</em>) – Specifies the path to the document which saves all the tiles by their minx, miny, maxx, maxy coordinates which were <strong>not</strong> successfully downloaded.</p></li>
+<li><p><strong>WMS_1</strong> (<em>str</em>) – Initial URL stub for requests to the openNRW server.</p></li>
+<li><p><strong>WMS_2</strong> (<em>str</em>) – Final URL stub for requests to the openNRW server.</p></li>
+<li><p><strong>NUM_THREADS</strong> (<em>int</em>) – Number of threads used to simultaneously download tiles from the openNRW server.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="src.pipeline_components.tile_downloader.TileDownloader.download">
+<code class="sig-name descname"><span class="pre">download</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Tile_coords</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threadCounter</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.pipeline_components.tile_downloader.TileDownloader.download" title="Permalink to this definition">¶</a></dt>
+<dd><p>Download tiles from openNRW’s web servers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Tile_coords</strong> (<em>list</em>) – Tile_coords is a list of tuples. Each tuple specifies its respective tile by minx, miny, maxx, maxy.</p></li>
+<li><p><strong>threadCounter</strong> (<em>int</em>) – ID to distinguish between the different threads working in parallel.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.pipeline_components.tile_processor">
+<span id="tile-processor"></span><h1>Tile Processor<a class="headerlink" href="#module-src.pipeline_components.tile_processor" title="Permalink to this headline">¶</a></h1>
+<p>Created on Wed Jun 26 14:31:47 2019</p>
+<p>&#64;author: Kevin</p>
+</div>
+<div class="section" id="module-src.pipeline_components.tile_updater">
+<span id="tile-updater"></span><h1>Tile Updater<a class="headerlink" href="#module-src.pipeline_components.tile_updater" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="module-src.pipeline_components.registry_creator">
+<span id="registry-creator"></span><h1>Registry Creator<a class="headerlink" href="#module-src.pipeline_components.registry_creator" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="module-data.nrw_county_data">
+<span id="nrw-county-data"></span><h1>NRW County Data<a class="headerlink" href="#module-data.nrw_county_data" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="module-data.nrw_rooftop_data">
+<span id="nrw-rooftop-data"></span><h1>NRW Rooftop Data<a class="headerlink" href="#module-data.nrw_rooftop_data" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="module-data.pv_database">
+<span id="pv-database"></span><h1>PV Database<a class="headerlink" href="#module-data.pv_database" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="module-data.pv_registry">
+<span id="pv-registry"></span><h1>PV Registry<a class="headerlink" href="#module-data.pv_registry" title="Permalink to this headline">¶</a></h1>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">PV4GER</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Kevin Mayer.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
