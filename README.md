@@ -78,12 +78,12 @@ Lastly, to create PV registries for any county within North Rhine-Westphalia, yo
 
 Please cite our work as
 
-@misc{rausch2020enriched,
+    @misc{rausch2020enriched,
       title={An Enriched Automated PV Registry: Combining Image Recognition and 3D Building Data}, 
       author={Benjamin Rausch and Kevin Mayer and Marie-Louise Arlt and Gunther Gust and Philipp Staudt and Christof Weinhardt and Dirk Neumann and Ram Rajagopal},
       year={2020},
       eprint={2012.03690},
       archivePrefix={arXiv},
       primaryClass={cs.CV}
-}
+    }
 
