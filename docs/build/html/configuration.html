@@ -1,0 +1,126 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pipeline Configuration &#8212; PV4GER 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Pipeline Step 1: Tile Creator" href="tile_creator.html" />
+    <link rel="prev" title="Welcome to PV4GER’s documentation!" href="index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tile_creator.html" title="Pipeline Step 1: Tile Creator"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to PV4GER’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PV4GER 0.0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Pipeline Configuration</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pipeline-configuration">
+<h1>Pipeline Configuration<a class="headerlink" href="#pipeline-configuration" title="Permalink to this headline">¶</a></h1>
+<p>The only parts in <strong>config.yml</strong> that you need to touch are:</p>
+<dl class="simple">
+<dt><strong>bing_key:</strong></dt><dd><p>Put your Bing API key here. You only need a Bing API key if you intend to run <em>registry_creator.py</em>. The API key is needed to translate the latitude and longitude values of detected PV systems into actual street addresses.</p>
+</dd>
+<dt><strong>county4analysis:</strong></dt><dd><p>Specify the county in North Rhine-Westphalia for which you want to run the analysis by name, e.g. <em>Essen</em>.</p>
+</dd>
+<dt><strong>run_tile_creator:</strong></dt><dd><p>Put 1 if you would like to execute this pipeline step and 0 if you would like to skip it.</p>
+</dd>
+<dt><strong>run_tile_downloader:</strong></dt><dd><p>Put 1 if you would like to execute this pipeline step and 0 if you would like to skip it.</p>
+</dd>
+<dt><strong>run_tile_processor:</strong></dt><dd><p>Put 1 if you would like to execute this pipeline step and 0 if you would like to skip it.</p>
+</dd>
+<dt><strong>run_tile_coords_updater:</strong></dt><dd><p>Put 1 if you would like to execute this pipeline step and 0 if you would like to skip it.</p>
+</dd>
+<dt><strong>run_registry_creator:</strong></dt><dd><p>Put 1 if you would like to execute this pipeline step and 0 if you would like to skip it.</p>
+</dd>
+</dl>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to PV4GER’s documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="tile_creator.html"
+                        title="next chapter">Pipeline Step 1: Tile Creator</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/configuration.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tile_creator.html" title="Pipeline Step 1: Tile Creator"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to PV4GER’s documentation!"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PV4GER 0.0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Pipeline Configuration</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Kevin Mayer.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.2.
+    </div>
+  </body>
+</html>

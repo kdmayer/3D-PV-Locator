@@ -1,0 +1,121 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pipeline Step 4: Registry Creator &#8212; PV4GER 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Optional Pipeline Step: Tile Updater" href="tile_updater.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tile_updater.html" title="Optional Pipeline Step: Tile Updater"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PV4GER 0.0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Pipeline Step 4: Registry Creator</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pipeline-step-4-registry-creator">
+<h1>Pipeline Step 4: Registry Creator<a class="headerlink" href="#pipeline-step-4-registry-creator" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-src.pipeline_components.registry_creator"></span><dl class="py class">
+<dt id="src.pipeline_components.registry_creator.RegistryCreator">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">src.pipeline_components.registry_creator.</span></code><code class="sig-name descname"><span class="pre">RegistryCreator</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.pipeline_components.registry_creator.RegistryCreator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates an address-level PV registry for the specified county by bringing together the information obtained from the tile processing step with the county’s 3D rooftop data.</p>
+<dl class="simple">
+<dt>county<span class="classifier">str</span></dt><dd><p>Name of the county for which the enrichted automated PV registry is created.</p>
+</dd>
+<dt>PV_gdf<span class="classifier">GeoDataFrame</span></dt><dd><p>Contains all the identified and segmented PV panels within a given county based on the results from the previous tile processing step.</p>
+</dd>
+<dt>rooftop_gdf<span class="classifier">GeoDataFrame</span></dt><dd><p>Contains all the rooftop information such as a rooftop’s tilt, its azimuth, and its geo-referenced polygon derived from openNRW’s 3D building data.</p>
+</dd>
+<dt>bing_key<span class="classifier">str</span></dt><dd><p>Your Bing API key which is needed to reverse geocode lat, lon values into actual street addresses.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="src.pipeline_components.registry_creator.RegistryCreator.run">
+<code class="sig-name descname"><span class="pre">run</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.pipeline_components.registry_creator.RegistryCreator.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an address-level PV registry by matching identified and segmented PV panels with their respective rooftop segments.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="tile_updater.html"
+                        title="previous chapter">Optional Pipeline Step: Tile Updater</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/registry_creator.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tile_updater.html" title="Optional Pipeline Step: Tile Updater"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PV4GER 0.0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Pipeline Step 4: Registry Creator</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Kevin Mayer.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.2.
+    </div>
+  </body>
+</html>

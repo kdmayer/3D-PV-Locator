@@ -5,7 +5,7 @@ import os
 
 class TileCoordsUpdater(object):
     """
-    In case the tile processing is halted or aborted, this class can be used to update the list of tiles to remove all the already processed tiles and to continue tile processing from where you left off.
+    In case the tile processing is halted or aborted, this class can be used to update the list of tiles by removing all the already processed tiles.
 
     Attributes
     ----------
@@ -39,7 +39,7 @@ class TileCoordsUpdater(object):
 
     def update(self):
         """
-        Removes all the already processed tiles within a given county from the list of tiles which ought to be processed.f
+        Removes all the already processed tiles within a given county from the list of tiles which ought to be processed.
         """
 
         if os.path.exists(self.processed_path):

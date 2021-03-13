@@ -6,55 +6,39 @@
 Welcome to PV4GER's documentation!
 ==================================
 
-Documentation for the Code
-**************************
+Introduction
+===================
+
+PV4GER aims at democratizing and accelerating the access to photovoltaic (PV) systems data in Germany and beyond. To do so, we have developed a computer vision-based pipeline which leverages 3D building data to automatically create address-level PV registries for all counties within Germany's most populous state North Rhine-Westphalia.
+
+For a detailed description of the underlying pipeline and a case study for the city of Bottrop, please have a look at our spotlight talk *"An Enriched Automated PV Registry: Combining Image Recognition and 3D Building Data"* at NeurIPS 2020:
+
+- `Paper <https://www.climatechange.ai/papers/neurips2020/46/paper.pdf>`_
+- `Slides <https://www.climatechange.ai/papers/neurips2020/46/slides.pdf>`_
+- `Recorded Talk <https://slideslive.com/38942134/an-enriched-automated-pv-registry-combining-image-recognition-and-3d-building-data>`_
+
+Workflow
+===================
+
+To execute the pipeline for a given county, make sure that you have:
+
+1. Downloaded the pre-trained model weights for PV classification and segmentation from our public S3 bucket.
+2. Set up and activated your local virtual environment based on the provided *requirements.txt*.
+3. Downloaded the .GeoJSON with all the rooftop information for your selected county from our public S3 bucket.
+4. Set up the config.yml appropriately before executing *run_pipeline.py*
+
+Contents
+===================
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-Tile Creator
-===================
-.. automodule:: src.pipeline_components.tile_creator
-.. autoclass:: TileCreator
-   :members: __init__, defineTileCoords
-
-Tile Downloader
-===================
-.. automodule:: src.pipeline_components.tile_downloader
-   :members:
-
-Tile Processor
-===================
-.. automodule:: src.pipeline_components.tile_processor
-   :members:
-
-Tile Updater
-===================
-.. automodule:: src.pipeline_components.tile_updater
-   :members:
-
-Registry Creator
-===================
-.. automodule:: src.pipeline_components.registry_creator
-   :members:
-
-NRW County Data
-===================
-.. automodule:: data.nrw_county_data
-   :members:
-
-NRW Rooftop Data
-===================
-.. automodule:: data.nrw_rooftop_data
-   :members:
-
-PV Database
-===================
-.. automodule:: data.pv_database
-   :members:
-
-PV Registry
-===================
-.. automodule:: data.pv_registry
-   :members:
+   configuration
+   tile_creator
+   tile_downloader
+   tile_processor
+   tile_updater
+   registry_creator
+   supplementary_info
 
