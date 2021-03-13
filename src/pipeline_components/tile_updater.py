@@ -4,8 +4,18 @@ import pandas as pd
 import os
 
 class TileCoordsUpdater(object):
+    """
+    In case the tile processing is halted or aborted, this class can be used to update the list of tiles to remove all the already processed tiles and to continue tile processing from where you left off.
+    """
 
     def __init__(self, configuration=None, tile_coords=None):
+        """
+        
+        Parameters
+        ----------
+        configuration
+        tile_coords
+        """
 
         self.old_tile_coords = tile_coords
 
@@ -16,18 +26,6 @@ class TileCoordsUpdater(object):
         self.processed_path = Path(f"logs/processing/{self.county}_processedTiles.csv")
 
     def update(self):
-
-        '''
-
-        input:
-
-        None
-
-        :return:
-
-        pickle file, which contains all tiles that have not yet been processed.
-
-        '''
 
         if os.path.exists(self.processed_path):
 

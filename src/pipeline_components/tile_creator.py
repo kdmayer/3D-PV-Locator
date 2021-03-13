@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-@author: Kevin
-"""
 import numpy as np
 import pickle
 from shapely.geometry import Point
@@ -56,8 +53,8 @@ class TileCreator(object):
 
     def defineTileCoords(self):
         """
-        Spans a grid of tiles, each with a dimension 240m x 240m, over North Rhine-Westphalia and saves the tiles within the respective county by their minx, miny, maxx, maxy coordinates.
-        Only tiles where at least one corner is within the county's polygon will be downloaded.
+        Spans a grid of tiles, each with a dimension 240m x 240m, over North Rhine-Westphalia and saves the tiles within the respective county by their minx, miny, maxx, maxy coordinates. 
+        Only tiles where at least one corner is within the county's polygon will be saved and later downloaded.
         """
 
         # dlat spans a distance of 'side' meters in north-south direction:

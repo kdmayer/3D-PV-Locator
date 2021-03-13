@@ -15,7 +15,7 @@ class TileDownloader(object):
     
     Attributes
     ----------
-    tile_dir : str
+    tile_dir : Path
         Path to directory where all the downloaded tiles are saved.
     downloaded_path : Path
         Specifies the path to the document which saves all the tiles by their minx, miny, maxx, maxy coordinates which were successfully downloaded.
@@ -47,7 +47,7 @@ class TileDownloader(object):
 
         self.tile_coords = tile_coords
 
-        self.tile_dir = configuration['tile_dir']
+        self.tile_dir = Path(configuration['tile_dir'])
 
         self.downloaded_path = Path(f"logs/downloading/{configuration.get('county4analysis')}_downloadedTiles.csv")
 

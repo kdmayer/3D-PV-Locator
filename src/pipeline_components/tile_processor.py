@@ -1,14 +1,7 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Wed Jun 26 14:31:47 2019
-
-@author: Kevin
-"""
 from __future__ import print_function
 from __future__ import division
-
 from src.utils.polygon_creator import PolygonCreator
-
 from pathlib import Path
 import torch
 from torchvision import datasets, models, transforms, utils
@@ -25,8 +18,52 @@ from torch.utils.data import Dataset, DataLoader
 from src.dataset.dataset import NrwDataset
 import sys
 
-# Todo: Modularize __processTiles() by writing separate functions for classifying and segmenting a batch
+#Todo: Modularize __processTiles() by writing separate functions for classifying and segmenting a batch
 class TileProcessor(object):
+    """
+    Class which splits tiles into smaller images, performs a binary classifiaction on each image to identify PV panels and segments a PV system's area on positively classified images.
+    
+    Attributes
+    ----------
+    cls_threshold : float
+        Threshold value with respect to the classification network's softmax score above which an image is classified as positive.
+    seg_threshold : float
+        Threshold value to turn the segmentation model's final class activation maps into binary segmentation masks.
+    batch_size : float
+        Specifies the number of samples per batch processed by the classification network.
+    input_size : float
+        Specifies the dimension of the images being processed by the classification network. This should not be changed.
+    cls_checkpoint_path :  str
+        Path for loading the pre-trained classification weights.
+    seg_checkpoint_path :  str
+        Path for loading the pre-trained segmentation weights. 
+    tile_dir : str
+        Path to directory where all the downloaded tiles are saved.
+    pv_db_path : Path
+        Path to the .csv file which saves the tile ID, the image ID, and the geo-referenced polygon for all identified PV systems.
+    processed_path : Path
+        Path to the .csv file which saves all the tile IDs which have been successfully processed.
+    not_processed_path : Path
+        Path to the .csv file which saves all the tile IDs which have been **not** successfully processed.
+    cls_model : torchvision.models.inception.Inception3
+        Model to identify PV panels on aerial imagery.
+    seg_model : torchvision.models.segmentation.deeplabv3.DeepLabV3
+        Model to segment PV panels on aerial imagery.
+    dataset : src.dataset.dataset.NrwDataset
+        All the images which will be processed by our PV pipeline.
+    polygon : shapely.geometry.polygon.Polygon 
+        Geo-referenced polygon geometry for the selected county within NRW.
+    radius : int
+        Earth radius in meters.
+    side : int
+        Aerial image side length in meters.
+    size :  int
+        Aerial image side lenght in pixels.
+    dlat :  float
+        Spans a distance of 16 meters in north-south direction.
+    polygonCreator : src.utils.polygon_creator.PolygonCreator
+        Turns binary segmentation mask of PV systems into geo-referenced polygons.
+    """
 
     def __init__(self, configuration, polygon):
 
@@ -149,8 +186,6 @@ class TileProcessor(object):
             x_coord = minx
 
             while W < E:
-                # The first image is taken from the upper left corner, we then slide from left
-                # to right and from top to bottom
 
                 images.append(tile[N:N + 320, W:W + 320])
                 coords.append((x_coord, y_coord))
@@ -325,6 +360,9 @@ class TileProcessor(object):
                                                  'PV_polygon': row['geometry']})
 
     def run(self):
+        """
+        Loads dataset of tiles, splits each tile into 16m x 16m images, and processes the aerial images within the specified county by detecting and segmenting PV panels.
+        """
 
         print('Dataset Size:', len(self.dataset))
 
@@ -346,19 +384,17 @@ class TileProcessor(object):
             currentTile = batch[0]
 
             # Try to process and record it
-            # try:
+            try:
 
-            self.__processTiles(currentTile, trans_cls, trans_seg)
+                self.__processTiles(currentTile, trans_cls, trans_seg)
 
-            with open(Path(self.processed_path), "a") as csvFile:
+                with open(Path(self.processed_path), "a") as csvFile:
 
-                writer = csv.writer(csvFile, lineterminator="\n")
+                    writer = csv.writer(csvFile, lineterminator="\n")
 
-                writer.writerow([currentTile])
+                    writer.writerow([currentTile])
 
             # Only tiles that weren't fully processed are saved subsequently
-            # ToDo: Catch the exception and write it in a second column in the .csv
-            '''
             except:
 
                 e = sys.exc_info()[0]
@@ -369,7 +405,7 @@ class TileProcessor(object):
                     writer = csv.writer(csvFile, lineterminator="\n")
 
                     writer.writerow([currentTile, e])
-            '''
+
             # Delete iterated tile
             os.remove(Path(self.tile_dir + "/" + str(currentTile)))
 
