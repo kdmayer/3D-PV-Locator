@@ -11,8 +11,26 @@ import time
 import math
 
 class RegistryCreator():
+    """
+    Creates an address-level PV registry for the specified county by bringing together the information obtained from the tile processing step with the county's 3D rooftop data.
+
+    county : str
+        Name of the county for which the enrichted automated PV registry is created.
+    PV_gdf : GeoDataFrame
+        Contains all the identified and segmented PV panels within a given county based on the results from the previous tile processing step.
+    rooftop_gdf : GeoDataFrame
+        Contains all the rooftop information such as a rooftop's tilt, its azimuth, and its geo-referenced polygon derived from openNRW's 3D building data.
+    bing_key : str
+        Your Bing API key which is needed to reverse geocode lat, lon values into actual street addresses.
+    """
 
     def __init__(self, configuration):
+        """ 
+        Parameters
+        ----------
+        configuration : dict
+            The configuration based on config.yml in dict format.
+        """
 
         self.county = configuration.get('county4analysis')
 
@@ -57,13 +75,18 @@ class RegistryCreator():
 
     def _ckdnearest(self, gdA, gdB):
         """
-        finds nearest points of GeoPandas.DataFrame gdB in GeoPandas.DataFrame gdA
-        please be sure that the index is resorted before using this function as it is using
-        numpy array indices which are not the same if you used boolean indexing or other mutable operations on the
-        DataFrames gdA index!
-        :param gdA: must contain a shapely Point geometry column
-        :param gdB: must contain a shapely Point geometry column
-        :return: concatenated GeoPandas.DataFrame containing all columns of both DataFrames excluding gdA's geometry plus distance in degrees
+        Identifies the nearest points of GeoPandas.DataFrame gdB in GeoPandas.DataFrame gdA. Indices need to be resorted before using this function. 
+        
+        Parameters
+        ----------
+        gdA : GeoPandas.GeoDataFrame 
+            GeoDataFrame which contains a column specifying shapely.geometry.Point objects 
+        gdB : GeoPandas.GeoDataFrame
+            GeoDataFrame which contains a column specifying shapely.geometry.Point objects 
+        Returns
+        -------
+        GeoPandas.GeoDataFrame 
+            Concatenated GeoPandas.GeoDataFrame containing all columns of both GeoDataFrames excluding gdA's geometry plus distance in degrees.
         """
 
         nA = np.array(list(zip(gdA.geometry.x, gdA.geometry.y)))
@@ -250,6 +273,13 @@ class RegistryCreator():
         self.registry = gpd.GeoDataFrame(self.registry)
 
     def run(self):
+        """
+        Create an address-level PV registry by matching identified and segmented PV panels with their respective rooftop segments.
+        
+        Returns
+        -------
+
+        """
 
         self._dissolve_raw_PVs()
 
@@ -261,15 +291,13 @@ class RegistryCreator():
 
         self.registry.to_file(driver='GeoJSON', filename=f"data/pv_registry/{self.county}_registry.geojson")
 
-        #ToDo:
+        
         '''
         1. Is it the expected behavior that the geometry feature PV_intersectionplusdiff_gdf only shows the intersected part? It's on purpose
         2. Please explain the tilt clipping in line 218/219. Done
         3. How can percentage intersect be larger than 1.0 (line 202)? In my case it is even as large as 2 to 3?!
         4. What do the points in self.registry stand for? They are the geo-coded street addresses
-        5. Why do we need a geocoder if all the polygons are geo-referenced? For consistency reasons and in order to match the MaStR addresses with the automated pv registry street address
-        6. Add public GoogleDrive Account with read-only access to share shapefiles, model checkpoints, and datasets
-        7. Add a city or county variable in the config.yml and automate the download process
+        5. Why do we need a geocoder if all the polygons are geo-referenced? For consistency reasons and in order to match the MaStR addresses with the automated pv registry street address 
         '''
 
 

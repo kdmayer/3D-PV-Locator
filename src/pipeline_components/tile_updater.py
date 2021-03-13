@@ -6,15 +6,27 @@ import os
 class TileCoordsUpdater(object):
     """
     In case the tile processing is halted or aborted, this class can be used to update the list of tiles to remove all the already processed tiles and to continue tile processing from where you left off.
+
+    Attributes
+    ----------
+    old_tile_coords : list
+        List of tuples with all the tiles within the selected county.
+    county : str
+        The name of the county for which you run the analysis.
+    tile_coords_path : Path
+        Path to the pickle file which stores the list of tuples for all tiles within a given county.
+    processed_path : Path
+        Path to the .csv file which stores all the already processed tiles within a given county.
     """
 
     def __init__(self, configuration=None, tile_coords=None):
         """
-        
         Parameters
         ----------
-        configuration
-        tile_coords
+        configuration : dict
+            The configuration based on config.yml in dict format.
+        tile_coords : list
+            List of tuples, where each tuple specifies the to be downloaed tiles by their minx, miny, maxx, maxy coordinates.
         """
 
         self.old_tile_coords = tile_coords
@@ -26,6 +38,9 @@ class TileCoordsUpdater(object):
         self.processed_path = Path(f"logs/processing/{self.county}_processedTiles.csv")
 
     def update(self):
+        """
+        Removes all the already processed tiles within a given county from the list of tiles which ought to be processed.f
+        """
 
         if os.path.exists(self.processed_path):
 

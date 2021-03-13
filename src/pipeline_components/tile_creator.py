@@ -12,7 +12,7 @@ class TileCreator(object):
     Attributes
     ----------
     output_path : Path
-        Path to the pickle file which will save the list with all tiles within the selected county.
+        Path to the pickle file which saves the list of all tiles within the selected county.
     radius : int
         Earth radius in meters.
     side : int
@@ -31,13 +31,10 @@ class TileCreator(object):
 
     def __init__(self, county_handler):
         """
-        Sets instance variables. 
-        
         Parameters
         ----------
         county_handler : GeoJsonHandler
             GeoJsonHandler instance which specifies the name and the geo-referenced polygon for a selected county within North Rhine-Westphalia (NRW).
-
         """
         self.output_path = Path(f"data/coords/{county_handler.name}.pickle")
         self.radius = 6371000

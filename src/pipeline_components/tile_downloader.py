@@ -84,11 +84,9 @@ class TileDownloader(object):
         Parameters
         ----------
         Tile_coords : list
-            List of tuples. Each tuple specifies its respective tile by minx, miny, maxx, maxy.
+            List of tuples. Each tuple specifies a to be downloaded tile by its minx, miny, maxx, maxy.
         threadCounter : int
             ID to distinguish between the different threads working in parallel.
-
-
         Returns
         -------
 

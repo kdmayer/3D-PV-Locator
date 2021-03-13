@@ -18,7 +18,7 @@ from torch.utils.data import Dataset, DataLoader
 from src.dataset.dataset import NrwDataset
 import sys
 
-#Todo: Modularize __processTiles() by writing separate functions for classifying and segmenting a batch
+# TODO: Modularize __processTiles() by writing separate functions for classifying and segmenting a batch
 class TileProcessor(object):
     """
     Class which splits tiles into smaller images, performs a binary classifiaction on each image to identify PV panels and segments a PV system's area on positively classified images.
@@ -58,7 +58,7 @@ class TileProcessor(object):
     side : int
         Aerial image side length in meters.
     size :  int
-        Aerial image side lenght in pixels.
+        Aerial image side length in pixels.
     dlat :  float
         Spans a distance of 16 meters in north-south direction.
     polygonCreator : src.utils.polygon_creator.PolygonCreator
