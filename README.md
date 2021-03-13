@@ -70,10 +70,6 @@ Lastly, to create PV registries for any county within North Rhine-Westphalia, yo
 - OpenNRW provides exhaustive aerial imagery for the German state of North Rhine-Westphalia (NRW)
 - Aerial imagery is characterized by a spatial resolution of 10cm/pixel
 
-## Documentation:
-
-# NEEDS TO BE UPDATED!!!
-
 ## License:
 
 [MIT](https://github.com/kdmayer/PV_Pipeline/blob/master/LICENSE)
@@ -82,5 +78,12 @@ Lastly, to create PV registries for any county within North Rhine-Westphalia, yo
 
 Please cite our work as
 
-# NEEDS TO BE UPDATED!!!
+@misc{rausch2020enriched,
+      title={An Enriched Automated PV Registry: Combining Image Recognition and 3D Building Data}, 
+      author={Benjamin Rausch and Kevin Mayer and Marie-Louise Arlt and Gunther Gust and Philipp Staudt and Christof Weinhardt and Dirk Neumann and Ram Rajagopal},
+      year={2020},
+      eprint={2012.03690},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
 
