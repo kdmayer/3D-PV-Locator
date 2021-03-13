@@ -67,8 +67,8 @@ Lastly, to create PV registries for any county within North Rhine-Westphalia, yo
 
 ## OpenNRW Platform:
 
-- The openNRW platform provides exhaustive aerial imagery for the German state of North Rhine-Westphalia (NRW)
-- Aerial imagery is characterized by a ground sampling distance (GSD) of 10 cm
+- OpenNRW provides exhaustive aerial imagery for the German state of North Rhine-Westphalia (NRW)
+- Aerial imagery is characterized by a spatial resolution of 10cm/pixel
 
 ## Documentation:
 
