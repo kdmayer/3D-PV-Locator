@@ -44,7 +44,7 @@ Next, set up your conda environment with all required dependencies by executing
     
 Lastly, to create PV registries for any county within North Rhine-Westphalia, you need to 
 
-1. Download the 3D building data for your desired county from our S3 bucket by executing and replacing <YOUR_DESIRED_COUNTY.geojson> 
+1. Download the 3D building data for your desired county from our S3 bucket by executing and replacing <YOUR_DESIRED_COUNTY.geojson> with a county name from the list below:
 
         aws s3 cp --request-payer requester s3://pv4ger/NRW_rooftop_data/<YOUR_DESIRED_COUNTY.geojson> data/nrw_rooftop_data/
         
@@ -58,14 +58,16 @@ Lastly, to create PV registries for any county within North Rhine-Westphalia, yo
     
         bing_key: <YOUR_BING_KEY>
 
-3. Specify the name of your desired county for analysis in the config.yml next to the "county4analysis" element 
+3. Specify the name of your desired county for analysis in the config.yml next to the "county4analysis" element by choosing one of the counties from the list below:
 
     Example:
         
         county4analysis: Essen
         
-    Please choose the county name from the following list:
-    
+## List of available counties:
+        
+    Please choose the county you would like to run the pipeline for from the following list:
+
     - Düren
     - Essen
     - Unna
