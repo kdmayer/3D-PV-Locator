@@ -1,20 +1,20 @@
 # Configuration
 
 # -------- Geocoder --------
-# Your Bing API key to geocode addresses
-bing_key: <YOUR_BING_KEY>
+# Your Bing API key to geocode addresses. Only needed if you run the final pipeline step, i.e. "run_registry_creator: 1"
+bing_key: <YOUR_BING_API_KEY>
 
 # -------- Area of interest --------
-# Specify the county for which you would like to run the analysis
-county4analysis: <YOUR_DESIRED_COUNTY>
+# Specify the county for which you would like to run the analysis. Feel free to replace "Essen" by any other name from the list of available counties.
+county4analysis: Essen
 
 # -------- Pipeline --------
 # Which part of the pipeline do you want to execute?
-run_tile_creator: 0
+run_tile_creator: 1
 
-run_tile_downloader: 0
+run_tile_downloader: 1
 
-run_tile_processor: 0
+run_tile_processor: 1
 
 run_tile_coords_updater: 0
 
