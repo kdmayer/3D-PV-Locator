@@ -66,61 +66,61 @@ Lastly, to create PV registries for any county within North Rhine-Westphalia, yo
         
 ## List of available counties:
         
-    Please choose the county you would like to run the pipeline for from the following list:
+Please choose the county you would like to run the pipeline for from the following list:
 
-    - Düren
-    - Essen
-    - Unna
-    - Mönchengladbach
-    - Solingen
-    - Dortmund
-    - Gütersloh
-    - Olpe
-    - Steinfurt
-    - Bottrop
-    - Coesfeld
-    - Leverkusen
-    - Köln
-    - Soest
-    - Mülheim-a.d.-Ruhr
-    - Münster
-    - Heinsberg
-    - Oberhausen
-    - Euskirchen
-    - Krefeld
-    - Warendorf
-    - Recklinghausen
-    - Bochum
-    - Rhein-Kreis-Neuss
-    - Rheinisch-Bergischer-Kreis
-    - Herne
-    - Kleve
-    - Bonn
-    - Minden-Lübbecke
-    - Herford
-    - Rhein-Sieg-Kreis
-    - Düsseldorf
-    - Hagen
-    - Paderborn
-    - Wuppertal
-    - Oberbergischer-Kreis
-    - Viersen
-    - Rhein-Erft-Kreis
-    - Märkischer-Kreis
-    - Städteregion-Aachen
-    - Remscheid
-    - Mettmann
-    - Lippe
-    - Ennepe-Ruhr-Kreis
-    - Hochsauerlandkreis
-    - Gelsenkirchen
-    - Höxter
-    - Borken
-    - Hamm
-    - Bielefeld
-    - Duisburg
-    - Siegen-Wittgenstein
-    - Wesel 
+- Düren
+- Essen
+- Unna
+- Mönchengladbach
+- Solingen
+- Dortmund
+- Gütersloh
+- Olpe
+- Steinfurt
+- Bottrop
+- Coesfeld
+- Leverkusen
+- Köln
+- Soest
+- Mülheim-a.d.-Ruhr
+- Münster
+- Heinsberg
+- Oberhausen
+- Euskirchen
+- Krefeld
+- Warendorf
+- Recklinghausen
+- Bochum
+- Rhein-Kreis-Neuss
+- Rheinisch-Bergischer-Kreis
+- Herne
+- Kleve
+- Bonn
+- Minden-Lübbecke
+- Herford
+- Rhein-Sieg-Kreis
+- Düsseldorf
+- Hagen
+- Paderborn
+- Wuppertal
+- Oberbergischer-Kreis
+- Viersen
+- Rhein-Erft-Kreis
+- Märkischer-Kreis
+- Städteregion-Aachen
+- Remscheid
+- Mettmann
+- Lippe
+- Ennepe-Ruhr-Kreis
+- Hochsauerlandkreis
+- Gelsenkirchen
+- Höxter
+- Borken
+- Hamm
+- Bielefeld
+- Duisburg
+- Siegen-Wittgenstein
+- Wesel 
 
 ## OpenNRW Platform:
 
