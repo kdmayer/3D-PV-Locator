@@ -12,7 +12,7 @@ For a detailed description of the underlying pipeline and a case study for the c
 - [Slides](https://www.climatechange.ai/papers/neurips2020/46/slides.pdf)
 - [Recorded Talk](https://slideslive.com/38942134/an-enriched-automated-pv-registry-combining-image-recognition-and-3d-building-data)
 
-As you are interested in this work, you might also want to look at our other projects within the EnergyAtlas initiative:
+You might also want to take a look at other projects within Stanford's EnergyAtlas initiative:
 
 - [EnergyAtlas](http://web.stanford.edu/group/energyatlas/home.html)
 - [DeepSolar for Germany](https://ieeexplore.ieee.org/document/9203258)
