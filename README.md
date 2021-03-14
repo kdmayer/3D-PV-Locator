@@ -21,10 +21,10 @@ You might also want to take a look at other projects within Stanford's EnergyAtl
 
 Please note that apart from the pipeline code and documentation, we also provide you with
 
-- **Pre-trained model checkpoints for PV classification and segmentation on aerial imagery with a spatial resolution of 10cm/pixel.**
-- **A 100,000+ image dataset for PV system classification**
-- **A 4,000+ image dataset for PV system segmentation**
-- **Pre-processed 3D building data in .GeoJSON format for the entire state of North Rhine-Westphalia.** 
+- Pre-trained model checkpoints for PV classification and segmentation on aerial imagery with a spatial resolution of 10cm/pixel.
+- A 100,000+ image dataset for PV system classification.
+- A 4,000+ image dataset for PV system segmentation.
+- Pre-processed 3D building data in .GeoJSON format for the entire state of North Rhine-Westphalia.
 
 In case you use any of these, please cite our work as specified at the bottom of this page.
 
