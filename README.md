@@ -75,6 +75,22 @@ Lastly, to create PV registries for any county within North Rhine-Westphalia, yo
     Example:
         
         county4analysis: Essen
+
+4. Put a "1" next to all the pipeline steps that you would like to run
+
+    Example:
+    
+        run_tile_creator: 1
+
+        run_tile_downloader: 1
+
+        run_tile_processor: 1
+
+        run_tile_coords_updater: 0
+
+        run_registry_creator: 1
+        
+   and execute run_pipeline.py in the root directory.
         
 ## List of available counties:
         
