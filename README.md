@@ -15,7 +15,7 @@ For a detailed description of the underlying pipeline and a case study for the c
 You might also want to take a look at other projects within Stanford's EnergyAtlas initiative:
 
 - [EnergyAtlas](http://web.stanford.edu/group/energyatlas/home.html)
-- [DeepSolar for Germany](https://ieeexplore.ieee.org/document/9203258)
+- DeepSolar for Germany: [Publication](https://ieeexplore.ieee.org/document/9203258) and [Code](https://github.com/kdmayer/PV_Pipeline)
 
 # Public S3 Bucket: PV4GER
 
