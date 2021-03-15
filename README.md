@@ -70,7 +70,7 @@ Lastly, to create PV registries for any county within North Rhine-Westphalia, yo
     
         bing_key: <YOUR_BING_KEY>
         
-**NOTE**: You only need a BING API key, if you intend to run the registry_creator.py script which is the last pipeline step and creates the address-level PV registry. In case you are only interested in finding the PV locations and the PV polygons, you do neither need to run registry_creator.py nor obtain a Bing API key.
+    **NOTE**: You only need a BING API key, if you intend to run the registry_creator.py script which is the last pipeline step and creates the address-level PV    registry. In case you are only interested in finding the PV locations and the PV polygons, you do neither need to run registry_creator.py nor obtain a Bing      API key.
 
 3. Specify the name of your desired county for analysis in the config.yml next to the "county4analysis" element by choosing one of the counties from the list below:
 
