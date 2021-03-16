@@ -10,9 +10,9 @@ county4analysis: Essen
 
 # -------- Pipeline --------
 # Which part of the pipeline do you want to execute?
-run_tile_creator: 1
+run_tile_creator: 0
 
-run_tile_downloader: 1
+run_tile_downloader: 0
 
 run_tile_processor: 1
 
