@@ -311,7 +311,7 @@ class TileProcessor(object):
             batch4seg = torch.cat(batch4seg, dim=0)
 
             # Classify batch
-            cls_outputs = self.cls_model(batch4cls)
+            cls_outputs = self.cls_model(batch4cls.to(self.device))
 
             cls_prob = F.softmax(cls_outputs, dim=1)
             cls_prob = cls_prob.cpu().detach().numpy()
