@@ -41,7 +41,7 @@ seg_threshold: 0.55
 input_size: 299
 
 # Batch size should be as large as possible to speed up the classification process
-batch_size: 10
+batch_size: 4
 
 # -------- Model Checkpoint --------
 # Path for loading classification model weights
