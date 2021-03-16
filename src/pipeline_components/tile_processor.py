@@ -384,18 +384,17 @@ class TileProcessor(object):
             currentTile = batch[0]
 
             # Try to process and record it
-            #try:
+            try:
 
-            self.__processTiles(currentTile, trans_cls, trans_seg)
-
-            with open(Path(self.processed_path), "a") as csvFile:
-
-                writer = csv.writer(csvFile, lineterminator="\n")
-
-                writer.writerow([currentTile])
+                self.__processTiles(currentTile, trans_cls, trans_seg)
+    
+                with open(Path(self.processed_path), "a") as csvFile:
+    
+                    writer = csv.writer(csvFile, lineterminator="\n")
+    
+                    writer.writerow([currentTile])
 
             # Only tiles that weren't fully processed are saved subsequently
-            """
             except:
 
                 e = sys.exc_info()[0]
@@ -406,7 +405,7 @@ class TileProcessor(object):
                     writer = csv.writer(csvFile, lineterminator="\n")
 
                     writer.writerow([currentTile, e])
-            """
+                    
             # Delete iterated tile
             os.remove(Path(self.tile_dir + "/" + str(currentTile)))
 
