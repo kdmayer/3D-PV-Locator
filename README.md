@@ -2,7 +2,7 @@
 
 ![Pipeline overview](https://github.com/kdmayer/PV4GER/blob/master/pipeline_visualization.png)
 
-Repo with [documentation](docs/_build/rinoh/pv4ger.pdf) for "An Enriched Automated PV Registry: Combining Image Recognition and 3D Building Data"
+Repo with [documentation](docs/_build/rinoh/pv4ger.pdf) for "An Enriched Automated PV Registry: Combining Image Recognition and 3D Building Data" published at the "Tackling Climate Change with AI" workshop at NeurIPS 2020.
 
 PV4GER is a joint research initiative between [Stanford University](http://web.stanford.edu/group/energyatlas/home.html), [University of Freiburg](https://www.is.uni-freiburg.de/research/smart-cities-industries-group/smart-cities-industries-sci-group), and [LMU Munich](https://www.en.compecon.econ.uni-muenchen.de/staff/postdocs/arlt1/index.html) that aims at democratizing and accelerating the access to photovoltaic (PV) systems data in Germany and beyond. 
 
