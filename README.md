@@ -4,7 +4,16 @@
 
 Repo with [documentation](docs/_build/rinoh/pv4ger.pdf) for "An Enriched Automated PV Registry: Combining Image Recognition and 3D Building Data"
 
-PV4GER aims at democratizing and accelerating the access to photovoltaic (PV) systems data in Germany and beyond. To do so, we have developed a computer vision-based pipeline which leverages 3D building data to automatically create address-level PV registries for all counties within Germany's most populous state North Rhine-Westphalia.
+PV4GER is a joint research initiative between [Stanford University](http://web.stanford.edu/group/energyatlas/home.html), [University of Freiburg](https://www.is.uni-freiburg.de/research/smart-cities-industries-group/smart-cities-industries-sci-group), and [LMU Munich](https://www.en.compecon.econ.uni-muenchen.de/staff/postdocs/arlt1/index.html) that aims at democratizing and accelerating the access to photovoltaic (PV) systems data in Germany and beyond. 
+
+To do so, we have developed a computer vision-based pipeline leveraging aerial imagery with a spatial resolution of 10 cm/pixel and 3D building data to automatically create address-level PV registries for all counties within Germany's most populous state North Rhine-Westphalia. For every PV system in North Rhine-Westphalia, the automatically produced registry in GeoJSON-format specifies a system's: 
+
+- capacity 
+- tilted area
+- location in latitude and longitude 
+- street address
+- city and
+- ZIP code
 
 For a detailed description of the underlying pipeline and a case study for the city of Bottrop, please have a look at our spotlight talk at NeurIPS 2020:
 
