@@ -38,7 +38,7 @@ Please note that apart from the pipeline code and documentation, we also provide
 
 In case you use any of these, please cite our work as specified at the bottom of this page.
 
-**NOTE**: All images and 3D building data is obtained from [openNRW](https://open.nrw/). Labeling of the images for PV system classification and segmentation has been conducted by us.
+**NOTE**: All images and 3D building data is obtained from [openNRW](https://www.bezreg-koeln.nrw.de/brk_internet/geobasis/luftbildinformationen/aktuell/digitale_orthophotos/index.html). Labeling of the images for PV system classification and segmentation has been conducted by us.
 
 ## Usage Instructions:
 
