@@ -9,7 +9,7 @@ PV4GER is a joint research initiative between [Stanford University](http://web.s
 To do so, we have developed a computer vision-based pipeline leveraging aerial imagery with a spatial resolution of 10 cm/pixel and 3D building data to automatically create address-level PV registries for all counties within Germany's most populous state North Rhine-Westphalia. For every PV system in North Rhine-Westphalia, the automatically produced registry in GeoJSON-format specifies a system's: 
 
 - capacity 
-- area (corrected by considering the rooftop's tilt),
+- area (corrected by considering the rooftop's tilt)
 - location in latitude and longitude 
 - street address
 - city and
