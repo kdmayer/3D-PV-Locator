@@ -292,13 +292,7 @@ class RegistryCreator():
         self.registry.to_file(driver='GeoJSON', filename=f"data/pv_registry/{self.county}_registry.geojson")
 
         
-        '''
-        1. Is it the expected behavior that the geometry feature PV_intersectionplusdiff_gdf only shows the intersected part? It's on purpose
-        2. Please explain the tilt clipping in line 218/219. Done
-        3. How can percentage intersect be larger than 1.0 (line 202)? In my case it is even as large as 2 to 3?!
-        4. What do the points in self.registry stand for? They are the geo-coded street addresses
-        5. Why do we need a geocoder if all the polygons are geo-referenced? For consistency reasons and in order to match the MaStR addresses with the automated pv registry street address 
-        '''
+
 
 
 
