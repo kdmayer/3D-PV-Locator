@@ -9,7 +9,7 @@ import geopy.distance
 import geocoder
 import time
 import math
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 
 class RawSolarDatabase:
@@ -384,16 +384,30 @@ class RegistryCreator:
             )
         ).reset_index(drop=True)
 
-    def remove_erroneous_pv_polygons(self):
+    def remove_erroneous_pv_polygons(
+        self, raw_PV_installations_on_rooftop: gpd.GeoDataFrame = None
+    ) -> gpd.GeoDataFrame:
+        """
+        Removes PV polygons whose aggregated intersected area is larger than their original raw area
+
+        Parameters
+        ----------
+        raw_PV_installations_on_rooftop: GeoPandas.GeoDataFrame
+            GeoDataFrame which must contain the columns "area_inter", "raw_area", and "identifier"
+        Returns
+        -------
+        GeoPandas.GeoDataFrame
+            Input GeoDataFrame where erroneous PV polygons have been removed
+        """
 
         # Compute share of raw area that the intersected pv polygon covers
-        self.raw_PV_installations_on_rooftop["percentage_intersect"] = (
-            self.raw_PV_installations_on_rooftop["area_inter"]
-            / self.raw_PV_installations_on_rooftop["raw_area"]
+        raw_PV_installations_on_rooftop["percentage_intersect"] = (
+            raw_PV_installations_on_rooftop["area_inter"]
+            / raw_PV_installations_on_rooftop["raw_area"]
         )
 
         # Group intersection by polygon identifier and sum percentage
-        self.group_intersection_id = self.raw_PV_installations_on_rooftop.groupby(
+        group_intersection_id = raw_PV_installations_on_rooftop.groupby(
             "identifier"
         ).agg(
             {
@@ -408,58 +422,103 @@ class RegistryCreator:
         )
 
         # Find erroneous polygons whose area after intersection is larger than their original (raw) area
-        polygone = self.group_intersection_id[
-            self.group_intersection_id["percentage_intersect"] > 1.1
+        polygone = group_intersection_id[
+            group_intersection_id["percentage_intersect"] > 1.1
         ].index.tolist()
 
         # Filter out erroneous polygons identified above and all their respective sub-parts
-        self.raw_PV_installations_on_rooftop = (
-            self.raw_PV_installations_on_rooftop.drop(
-                self.raw_PV_installations_on_rooftop.index[
-                    (self.raw_PV_installations_on_rooftop["identifier"].isin(polygone))
-                    & (self.raw_PV_installations_on_rooftop["percentage_intersect"] < 1)
-                ]
-            )
+        raw_PV_installations_on_rooftop = raw_PV_installations_on_rooftop.drop(
+            raw_PV_installations_on_rooftop.index[
+                (raw_PV_installations_on_rooftop["identifier"].isin(polygone))
+                & (raw_PV_installations_on_rooftop["percentage_intersect"] < 1)
+            ]
         )
 
         # Drop duplicate identifiers for erroneous polygons
-        self.raw_PV_installations_on_rooftop = (
-            self.raw_PV_installations_on_rooftop.drop(
-                self.raw_PV_installations_on_rooftop.index[
-                    (self.raw_PV_installations_on_rooftop["identifier"].isin(polygone))
-                    & (self.raw_PV_installations_on_rooftop["identifier"].duplicated())
-                ]
-            )
+        raw_PV_installations_on_rooftop = raw_PV_installations_on_rooftop.drop(
+            raw_PV_installations_on_rooftop.index[
+                (raw_PV_installations_on_rooftop["identifier"].isin(polygone))
+                & (raw_PV_installations_on_rooftop["identifier"].duplicated())
+            ]
         )
 
-    def correct_area_by_tilt(self):
+        return raw_PV_installations_on_rooftop
 
-        # Clip tilts to account for incorrect geometries
+    def clip_incorrect_tilts(
+        self, raw_PV_installations_on_rooftop: gpd.GeoDataFrame = None
+    ) -> gpd.GeoDataFrame:
+        """
+        Adjusts tilts which are determined to be unreasonable to standard values
+
+        Parameters
+        ----------
+        raw_PV_installations_on_rooftop: GeoPandas.GeoDataFrame
+            GeoDataFrame which must contain the column "Tilt"
+        Returns
+        -------
+        GeoPandas.GeoDataFrame
+            Input GeoDataFrame where values in the "Tilt" are adjusted to standard values if they are deemed to be
+            incorrect
+        """
+
         # Two assumptions feed into these lines:
         # 1. Rooftop tilts larger than 50 degrees are unrealistic and likely due to erroneous data. We set them to a
         # standard tilt of 30 degrees
         # 2. PV panels are tilted in the same way as their underlying rooftop. On flat roofs, we assume a tilt angle
         # of 30 degrees
-        self.raw_PV_installations_on_rooftop["Tilt"][
-            self.raw_PV_installations_on_rooftop["Tilt"] >= 50
+        raw_PV_installations_on_rooftop["Tilt"][
+            raw_PV_installations_on_rooftop["Tilt"] >= 50
         ] = 30
-        self.raw_PV_installations_on_rooftop["Tilt"][
-            self.raw_PV_installations_on_rooftop["Tilt"] == 0
+        raw_PV_installations_on_rooftop["Tilt"][
+            raw_PV_installations_on_rooftop["Tilt"] == 0
         ] = 30
 
-        self.corrected_PV_installations_on_rooftop = (
-            self.raw_PV_installations_on_rooftop
+        return raw_PV_installations_on_rooftop
+
+    def adjust_detected_pv_area_by_tilt(
+        self, raw_PV_installations_on_rooftop: gpd.GeoDataFrame = None
+    ) -> gpd.GeoDataFrame:
+        """
+        Adjusts detected PV area by considering the rooftop's tilt
+
+        Parameters
+        ----------
+        raw_PV_installations_on_rooftop: GeoPandas.GeoDataFrame
+            GeoDataFrame which must contain the columns "Tilt" and "area_inter"
+        Returns
+        -------
+        GeoPandas.GeoDataFrame
+            Input GeoDataFrame extended by an additional column named "area_tilted" which adjusts
+            the detected PV area by considering the rooftop's tilt
+        """
+
+        raw_PV_installations_on_rooftop = self.clip_incorrect_tilts(
+            raw_PV_installations_on_rooftop
         )
 
         # Calculate corrected area by considering a rooftop's tilt
-        self.corrected_PV_installations_on_rooftop["area_tilted"] = (
+        raw_PV_installations_on_rooftop["area_tilted"] = (
             1
-            / self.corrected_PV_installations_on_rooftop["Tilt"]
+            / raw_PV_installations_on_rooftop["Tilt"]
             .apply(math.radians)
             .apply(math.cos)
-        ) * self.corrected_PV_installations_on_rooftop["area_inter"]
+        ) * raw_PV_installations_on_rooftop["area_inter"]
 
-    def _geocode_addresses(self, addresses):
+        return raw_PV_installations_on_rooftop
+
+    def _geocode_addresses(self, addresses: List[str]) -> List[Tuple[float, float]]:
+        """
+        Helper function to geocode a list of addresses
+
+        Parameters
+        ----------
+        addresses: list
+            list of all street addresses to be geocoded into latitude and longitude format
+        Returns
+        -------
+        coordinates: list
+            list of all geocoded street addresses
+        """
 
         coordinates = []
         counter = 0
@@ -486,6 +545,30 @@ class RegistryCreator:
                 coordinates.append(",")
 
         return coordinates
+
+    def calculate_pv_capacity(
+        self, registry: gpd.GeoDataFrame = None
+    ) -> gpd.GeoDataFrame:
+        """
+        Converts the detected PV area into a PV capacity estimate
+
+        Parameters
+        ----------
+        registry: GeoPandas.GeoDataFrame
+            GeoDataFrame which must contain the columns "area_inter" and "area_tilted"
+        Returns
+        -------
+        GeoPandas.GeoDataFrame
+            Input GeoDataFrame extended by two additional columns named "capacity_not_tilted_area" and
+            "capacity_tilted_area"
+        """
+
+        # We assume that 6.5 sqm of PV area are needed to produce 1 kWp
+        registry["capacity_not_tilted_area"] = registry.area_inter / 6.5
+
+        registry["capacity_tilted_area"] = registry.area_tilted / 6.5
+
+        return registry
 
     def create_registry_for_PV_installations(self):
         """
@@ -517,9 +600,13 @@ class RegistryCreator:
             + self.raw_PV_installations_on_rooftop["City"]
         )
 
-        self.remove_erroneous_pv_polygons()
+        self.raw_PV_installations_on_rooftop = self.remove_erroneous_pv_polygons(
+            self.raw_PV_installations_on_rooftop
+        )
 
-        self.correct_area_by_tilt()
+        self.corrected_PV_installations_on_rooftop = (
+            self.adjust_detected_pv_area_by_tilt(self.raw_PV_installations_on_rooftop)
+        )
 
         # Group by rooftop ID
         self.rooftop_registry = self.corrected_PV_installations_on_rooftop.dissolve(
@@ -578,31 +665,20 @@ class RegistryCreator:
         
         """
 
-        self.rooftop_registry["capacity_not_tilted"] = (
-            self.rooftop_registry.area_inter / 6.5
-        )
+        self.rooftop_registry = self.calculate_pv_capacity(self.rooftop_registry)
 
-        self.rooftop_registry["capacity_tilted"] = (
-            self.rooftop_registry.area_tilted / 6.5
-        )
-
-        self.address_registry["capacity_not_tilted"] = (
-            self.address_registry.area_inter / 6.5
-        )
-
-        self.address_registry["capacity_tilted"] = (
-            self.address_registry.area_tilted / 6.5
-        )
+        self.address_registry = self.calculate_pv_capacity(self.address_registry)
 
         self.rooftop_registry.to_file(
             driver="GeoJSON",
-            filename=f"data/pv_registry/{self.county}_rooftop_registry.geojson",
+            filename=f"/Users/kevin/Projects/Active/PV4GERFiles/pv4ger/data/pv_registry/{self.county}_rooftop_registry.geojson",
         )
-        
+
         self.address_registry.to_file(
             driver="GeoJSON",
-            filename=f"data/pv_registry/{self.county}_address_registry.geojson",
+            filename=f"/Users/kevin/Projects/Active/PV4GERFiles/pv4ger/data/pv_registry/{self.county}_address_registry.geojson",
         )
+
 
 if __name__ == "__main__":
 
