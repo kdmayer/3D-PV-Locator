@@ -95,7 +95,7 @@ def main():
 
         registryCreator = RegistryCreator(configuration=conf)
 
-        registryCreator.run()
+        registryCreator.create_registry_for_PV_installations()
 
 
 if __name__ == '__main__':
