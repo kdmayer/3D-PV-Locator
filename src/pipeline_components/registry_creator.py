@@ -167,22 +167,48 @@ class RegistryCreator:
         return gpd.GeoDataFrame(gdf)
 
     def calculate_distance_in_meters_between_raw_overhanging_pv_installation_centroid_and_nearest_intersected_installation_centroid(
-        self, nearest_address_gdf
+        self,
+        raw_overhanging_pv_installations_enriched_with_closest_rooftop_data: gpd.GeoDataFrame = None,
     ):
         """
         Calculate the distance in meters between the centroid of the overhanging PV polygon, here points_no_data,
         and the PV polygon centroid which is intersected with a rooftop polygon, here address_points
 
+        Parameters
+        ----------
+        raw_overhanging_pv_installations_enriched_with_closest_rooftop_data: GeoPandas.GeoDataFrame
+            GeoDataFrame where overhanging PV installations have been enriched with the attributes of the closest
+            rooftop
+
+        Returns
+        -------
+        GeoPandas.GeoDataFrame
+            GeoDataFrame where overhanging PV installations have been enriched with the attributes of the closest
+            rooftop with an additional attribute which specifies the distance between the centroid of the overhanging PV polygon and the centroid of the intersected PV polygon in meters
         """
 
         # Centroid coordinates of intersected pv polygons
         address_points = list(
-            zip(nearest_address_gdf["helper_x"], nearest_address_gdf["helper_y"])
+            zip(
+                raw_overhanging_pv_installations_enriched_with_closest_rooftop_data[
+                    "helper_x"
+                ],
+                raw_overhanging_pv_installations_enriched_with_closest_rooftop_data[
+                    "helper_y"
+                ],
+            )
         )
 
         # Centroid coordinates of overhanging pv polygons
         points_no_data = list(
-            zip(nearest_address_gdf["geometry"].x, nearest_address_gdf["geometry"].y)
+            zip(
+                raw_overhanging_pv_installations_enriched_with_closest_rooftop_data[
+                    "geometry"
+                ].x,
+                raw_overhanging_pv_installations_enriched_with_closest_rooftop_data[
+                    "geometry"
+                ].y,
+            )
         )
 
         dist = [
@@ -190,9 +216,11 @@ class RegistryCreator:
             for address, no_data in zip(address_points, points_no_data)
         ]
 
-        nearest_address_gdf["dist_in_meters"] = pd.Series(dist)
+        raw_overhanging_pv_installations_enriched_with_closest_rooftop_data[
+            "dist_in_meters"
+        ] = pd.Series(dist)
 
-        return nearest_address_gdf
+        return raw_overhanging_pv_installations_enriched_with_closest_rooftop_data
 
     def identify_raw_overhanging_PV_installations(self):
         """
@@ -229,30 +257,72 @@ class RegistryCreator:
             "geometry"
         ] = self.raw_overhanging_PV_installations["geometry"].centroid
 
-    def filter_raw_overhanging_PV_installations(self):
+    def filter_raw_overhanging_PV_installations_by_area(
+        self,
+        raw_overhanging_PV_installations: gpd.GeoDataFrame = None,
+        raw_PV_installations_on_rooftop: gpd.GeoDataFrame = None,
+    ) -> gpd.GeoDataFrame:
+        """
+        Only overhanging PV polygons which are larger than 1 sqm in area will be kept.
+
+        Parameters
+        ----------
+        raw_overhanging_PV_installations: GeoPandas.GeoDataFrame
+            GeoDataFrame which specifies all the PV polygons which border to a rooftop geometry.
+        raw_PV_installations_on_rooftop: GeoPandas.GeoDataFrame
+            GeoDataFrame which specifies all the PV polygons which are intersected with a rooftop geometry
+
+        Returns
+        -------
+        GeoPandas.GeoDataFrame
+            GeoDataFrame where overhanging PV installations have been filtered to contain only
+            those which border to a rooftop and are larger than 1 sqm in area
+        """
 
         # Select all the PV polygon IDs which have been successfully intersected with a rooftop
-        rooftop_pv_ids = (
-            self.raw_PV_installations_on_rooftop.identifier.unique().tolist()
-        )
+        rooftop_pv_ids = raw_PV_installations_on_rooftop.identifier.unique().tolist()
 
         # Select all the overhanging PV polygons whose identifier matches with one of the intersected solar panels
         # mounted on a rooftop
-        self.raw_overhanging_PV_installations = self.raw_overhanging_PV_installations[
-            self.raw_overhanging_PV_installations.identifier.isin(rooftop_pv_ids)
+        raw_overhanging_PV_installations = raw_overhanging_PV_installations[
+            raw_overhanging_PV_installations.identifier.isin(rooftop_pv_ids)
         ]
 
         # Only consider cut-off geometries larger than 1 sqm
-        self.raw_overhanging_PV_installations = self.raw_overhanging_PV_installations[
-            self.raw_overhanging_PV_installations["area_diff"] > 1.0
+        raw_overhanging_PV_installations = raw_overhanging_PV_installations[
+            raw_overhanging_PV_installations["area_diff"] > 1.0
         ]
 
-    def enrich_raw_overhanging_pv_installations_with_closest_rooftop_attributes(self):
+        return raw_overhanging_PV_installations
+
+    def enrich_raw_overhanging_pv_installations_with_closest_rooftop_attributes(
+        self,
+        raw_overhanging_PV_installations: gpd.GeoDataFrame = None,
+        raw_PV_installations_on_rooftop: gpd.GeoDataFrame = None,
+    ) -> gpd.GeoDataFrame:
+        """
+        PV polygons which do not intersect with a rooftop polygon, although they do border to a rooftop, are matched to
+        their nearest rooftop geometry
+
+        Parameters
+        ----------
+        raw_overhanging_PV_installations: GeoPandas.GeoDataFrame
+            GeoDataFrame which specifies all the PV polygons which border to a rooftop, but are not intersected with
+            a rooftop geometry
+        raw_PV_installations_on_rooftop: GeoPandas.GeoDataFrame
+            GeoDataFrame which specifies all the PV polygons which are intersected with a rooftop geometry
+
+        Returns
+        -------
+        GeoPandas.GeoDataFrame
+            GeoDataFrame where overhanging PV installations have been enriched with the attributes of the closest
+            rooftop
+        """
 
         raw_overhanging_pv_installations_enriched_with_closest_rooftop_data = (
             self._ckdnearest(
-                self.raw_overhanging_PV_installations,
-                self.raw_PV_installations_on_rooftop,
+                raw_overhanging_PV_installations,
+                raw_PV_installations_on_rooftop,
             )
         )
 
@@ -263,6 +333,7 @@ class RegistryCreator:
                 "centroid_intersect"
             ]
         ).x
+
         raw_overhanging_pv_installations_enriched_with_closest_rooftop_data[
             "helper_y"
         ] = gpd.GeoSeries(
@@ -324,37 +395,59 @@ class RegistryCreator:
 
         return raw_overhanging_pv_installations_enriched_with_closest_rooftop_data
 
-    def append_raw_overhanging_PV_installations_to_intersected_installations(self):
+    def append_raw_overhanging_PV_installations_to_intersected_installations(
+        self,
+        raw_overhanging_PV_installations: gpd.GeoDataFrame = None,
+        raw_PV_installations_on_rooftop: gpd.GeoDataFrame = None,
+    ) -> gpd.GeoDataFrame:
+        """
+        PV polygons which do not intersect with a rooftop polygon, although they do border to a rooftop, are matched to
+        their nearest rooftop geometry and appended to the GeoDataFrame listing all rooftop PV polygons
+
+        Parameters
+        ----------
+        raw_overhanging_PV_installations: GeoPandas.GeoDataFrame
+            GeoDataFrame which specifies all the PV polygons which border to a rooftop, but are not intersected with
+            a rooftop geometry
+        raw_PV_installations_on_rooftop: GeoPandas.GeoDataFrame
+            GeoDataFrame which specifies all the PV polygons which are intersected with a rooftop geometry
+
+        Returns
+        -------
+        GeoPandas.GeoDataFrame
+            GeoDataFrame where overhanging PV installations have been enriched with the attributes of the closest
+            rooftop and appended to raw_PV_installations_on_rooftop
+        """
 
         # IMPORTANT: if ckdnearest is used always reset_index before
-        self.raw_overhanging_PV_installations = (
-            self.raw_overhanging_PV_installations.reset_index(drop=True)
+        raw_overhanging_PV_installations = raw_overhanging_PV_installations.reset_index(
+            drop=True
         )
 
-        self.raw_overhanging_PV_installations.rename(
+        raw_overhanging_PV_installations.rename(
             columns={"identifier": "identifier_diff"}, inplace=True
         )
 
         # Extract centroid from intersected PV polygons while preserving their polygon geometry
-        self.raw_PV_installations_on_rooftop[
+        raw_PV_installations_on_rooftop[
             "geometry_intersected_polygon"
-        ] = self.raw_PV_installations_on_rooftop["geometry"]
-        self.raw_PV_installations_on_rooftop[
+        ] = raw_PV_installations_on_rooftop["geometry"]
+        raw_PV_installations_on_rooftop["geometry"] = raw_PV_installations_on_rooftop[
             "geometry"
-        ] = self.raw_PV_installations_on_rooftop["geometry"].centroid
-        self.raw_PV_installations_on_rooftop[
+        ].centroid
+        raw_PV_installations_on_rooftop[
             "centroid_intersect"
-        ] = self.raw_PV_installations_on_rooftop["geometry"]
+        ] = raw_PV_installations_on_rooftop["geometry"]
 
-        raw_overhanging_pv_installations_enriched_with_closest_rooftop_data = (
-            self.enrich_raw_overhanging_pv_installations_with_closest_rooftop_attributes()
+        raw_overhanging_pv_installations_enriched_with_closest_rooftop_data = self.enrich_raw_overhanging_pv_installations_with_closest_rooftop_attributes(
+            raw_overhanging_PV_installations, raw_PV_installations_on_rooftop
         )
 
-        self.raw_PV_installations_on_rooftop.geometry = (
-            self.raw_PV_installations_on_rooftop.geometry_intersected_polygon
+        raw_PV_installations_on_rooftop.geometry = (
+            raw_PV_installations_on_rooftop.geometry_intersected_polygon
         )
 
-        self.raw_PV_installations_on_rooftop = self.raw_PV_installations_on_rooftop[
+        raw_PV_installations_on_rooftop = raw_PV_installations_on_rooftop[
             [
                 "raw_area",
                 "identifier",
@@ -378,11 +471,13 @@ class RegistryCreator:
         # Note 1: Attributes starting with capital letters specify rooftop attributes.
         # Note 2: The geometry of the overhanging PV installations is not yet dissolved with the geometry of the
         # intersected PV installations
-        self.raw_PV_installations_on_rooftop = gpd.GeoDataFrame(
-            self.raw_PV_installations_on_rooftop.append(
+        raw_PV_installations_on_rooftop = gpd.GeoDataFrame(
+            raw_PV_installations_on_rooftop.append(
                 raw_overhanging_pv_installations_enriched_with_closest_rooftop_data
             )
         ).reset_index(drop=True)
+
+        return raw_PV_installations_on_rooftop
 
     def remove_erroneous_pv_polygons(
         self, raw_PV_installations_on_rooftop: gpd.GeoDataFrame = None
@@ -585,9 +680,19 @@ class RegistryCreator:
 
         self.identify_raw_overhanging_PV_installations()
 
-        self.filter_raw_overhanging_PV_installations()
+        self.raw_overhanging_PV_installations = (
+            self.filter_raw_overhanging_PV_installations_by_area(
+                self.raw_overhanging_PV_installations,
+                self.raw_PV_installations_on_rooftop,
+            )
+        )
 
-        self.append_raw_overhanging_PV_installations_to_intersected_installations()
+        self.raw_PV_installations_on_rooftop = (
+            self.append_raw_overhanging_PV_installations_to_intersected_installations(
+                self.raw_overhanging_PV_installations,
+                self.raw_PV_installations_on_rooftop,
+            )
+        )
 
         # Create street address column
         self.raw_PV_installations_on_rooftop["Street_Address"] = (
