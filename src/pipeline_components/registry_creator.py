@@ -9,13 +9,14 @@ import geopy.distance
 import geocoder
 import time
 import math
-from typing import List, Optional, Tuple
+from typing import List, Tuple
 
 
 class RawSolarDatabase:
     def from_csv(self, file_path: Path):
         """
-        Load raw PV polygons detected during the previous pipeline step from csv
+        Load raw PV polygons detected during the previous pipeline step from csv and convert it to a
+        Geopandas.GeoDataFrame with EPSG:4326 as the coordinate reference system
 
         Parameters
         ----------
@@ -29,16 +30,13 @@ class RawSolarDatabase:
             given county.
         """
 
-        # Load PV database file and convert it to a Geopandas.GeoDataFrame with EPSG:4326 as the coordinate reference system
         solar_db = pd.read_csv(
             file_path,
             sep=";",
             header=None,
             names=["Current_Tile_240", "UL_Image_16", "geometry"],
         )
-
         solar_db["geometry"] = solar_db["geometry"].apply(wkt.loads)
-
         solar_db = gpd.GeoDataFrame(solar_db, geometry="geometry")
         solar_db.crs = {"init": "epsg:4326"}
         solar_db["class"] = int(1)
@@ -104,7 +102,7 @@ class RegistryCreator:
         Parameters
         ----------
         raw_PV_polygons_gdf: GeoPandas.GeoDataFrame
-            GeoPandas.GeoDataFrame consisting off all detected PV polygons from the previous pipeline step.
+            GeoPandas.GeoDataFrame consisting of all detected PV polygons from the previous pipeline step.
         rooftop_gdf: GeoPandas.GeoDataFrame
             GeoPandas.GeoDataFrame specifying all rooftop geometries and attributes within the given county
 
@@ -748,7 +746,9 @@ class RegistryCreator:
 
         return raw_PV_installations_on_rooftop
 
-    def _geocode_addresses(self, addresses: List[str]) -> List[Tuple[float, float]]:
+    def _geocode_addresses(
+        self, addresses: List[str] = None, bing_key: str = None
+    ) -> List[Tuple[float, float]]:
         """
         Helper function to geocode a list of addresses
 
@@ -756,6 +756,8 @@ class RegistryCreator:
         ----------
         addresses: list
             list of all street addresses to be geocoded into latitude and longitude format
+        bing_geocoder: bool
+            If True, Bing's gecoder will be used, else OSM's geocoder is used to geocode street addresses
         Returns
         -------
         coordinates: list
@@ -764,25 +766,25 @@ class RegistryCreator:
 
         coordinates = []
         counter = 0
-
         for i in range(len(addresses)):
 
             counter += 1
             print(f"Geocode address {addresses[i]} at {counter}/{len(addresses)}")
-
             # Apply some sleep to ensure to be below 50 requests per second
             time.sleep(0.1)
             address = addresses[i]
-            # g = geocoder.bing(address, key=self.bing_key)
-            g = geocoder.osm(address)
+
+            if bing_key is not None:
+                g = geocoder.bing(address, key=bing_key)
+
+            else:
+                g = geocoder.osm(address)
 
             if g.status == "OK":
-
                 coords = g.latlng
                 coordinates.append(coords)
 
             else:
-
                 print("status: {}".format(g.status))
                 coordinates.append(",")
 
@@ -812,10 +814,9 @@ class RegistryCreator:
 
         return registry
 
-    def create_registry_for_PV_installations(self):
+    def create_rooftop_registry(self):
         """
-        Create an address-level and rooftop-level PV registry by grouping identified and segmented PV panels
-        by their address or rooftop id, respectively.
+        Create a rooftop-level PV registry by grouping identified and segmented PV panels by their rooftop id
         """
 
         # Group by rooftop ID
@@ -834,6 +835,22 @@ class RegistryCreator:
             },
         )
 
+        # Reset index for subsequent nearest neighbor search
+        self.rooftop_registry.reset_index(drop=True, inplace=True)
+
+        self.rooftop_registry = self.calculate_pv_capacity(self.rooftop_registry)
+
+        self.rooftop_registry.to_file(
+            driver="GeoJSON",
+            filename=f"/Users/kevin/Projects/Active/PV4GERFiles/pv4ger/data/pv_registry/{self.county}_rooftop_registry.geojson",
+        )
+
+    def create_address_registry(self):
+        """
+        Create an address-level PV registry by grouping identified and segmented PV panels
+        by their address.
+        """
+
         # Group by street address
         self.address_registry = self.corrected_PV_installations_on_rooftop.dissolve(
             by="Street_Address",
@@ -847,15 +864,18 @@ class RegistryCreator:
             },
         )
 
+        # You cannot save two columns with shapely objects to a geojson file. We drop the polygon geometries and save
+        # the geocoded street address instead.
+        self.address_registry.drop(["geometry"], axis=1, inplace=True)
+
         # Reset index for subsequent nearest neighbor search
-        self.rooftop_registry.reset_index(drop=True, inplace=True)
         self.address_registry.reset_index(drop=True, inplace=True)
 
-        """
-        # You cannot save two columns with shapely objects to a geojson file
         addresses = (self.address_registry["Street_Address"]).tolist()
 
-        coordinates = self._geocode_addresses(addresses)
+        coordinates = self._geocode_addresses(
+            addresses=addresses, bing_key=self.bing_key
+        )
 
         street_address_coords = gpd.GeoSeries(
             [
@@ -869,20 +889,9 @@ class RegistryCreator:
             [self.address_registry, street_address_coords], axis=1
         )
 
-        self.address_registry = self.address_registry.rename(
-            columns={0: "geocoded_street_address"}
-        )
-        
-        """
-
-        self.rooftop_registry = self.calculate_pv_capacity(self.rooftop_registry)
+        self.address_registry = self.address_registry.rename(columns={0: "geometry"})
 
         self.address_registry = self.calculate_pv_capacity(self.address_registry)
-
-        self.rooftop_registry.to_file(
-            driver="GeoJSON",
-            filename=f"/Users/kevin/Projects/Active/PV4GERFiles/pv4ger/data/pv_registry/{self.county}_rooftop_registry.geojson",
-        )
 
         self.address_registry.to_file(
             driver="GeoJSON",
@@ -900,4 +909,4 @@ if __name__ == "__main__":
 
         conf = yaml.load(f, Loader=yaml.FullLoader)
 
-    RegistryCreator(conf).create_registry_for_PV_installations()
+    RegistryCreator(conf).create_address_registry()

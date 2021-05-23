@@ -2,7 +2,7 @@
 
 # -------- Geocoder --------
 # Your Bing API key to geocode addresses. Only needed if you run the final pipeline step, i.e. "run_registry_creator: 1"
-bing_key: <YOUR_BING_API_KEY>
+bing_key:
 
 # -------- Area of interest --------
 # Specify the county for which you would like to run the analysis. Feel free to replace "Essen" by any other name from the list of available counties.
