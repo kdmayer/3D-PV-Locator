@@ -313,31 +313,15 @@ class RegistryCreator:
             rooftop with an additional attribute which specifies the distance between the centroid of the overhanging PV polygon and the centroid of the intersected PV polygon in meters
         """
 
-        raw_overhanging_pv_installations_enriched_with_closest_rooftop_data[
-            "helper_x"
-        ] = gpd.GeoSeries(
-            raw_overhanging_pv_installations_enriched_with_closest_rooftop_data[
-                "centroid_intersect"
-            ]
-        ).x
-
-        raw_overhanging_pv_installations_enriched_with_closest_rooftop_data[
-            "helper_y"
-        ] = gpd.GeoSeries(
-            raw_overhanging_pv_installations_enriched_with_closest_rooftop_data[
-                "centroid_intersect"
-            ]
-        ).y
-
         # Centroid coordinates of intersected pv polygons
         address_points = list(
             zip(
                 raw_overhanging_pv_installations_enriched_with_closest_rooftop_data[
-                    "helper_x"
-                ],
+                    "centroid_intersect"
+                ].x,
                 raw_overhanging_pv_installations_enriched_with_closest_rooftop_data[
-                    "helper_y"
-                ],
+                    "centroid_intersect"
+                ].y,
             )
         )
 
@@ -485,18 +469,6 @@ class RegistryCreator:
                 raw_overhanging_PV_installations,
                 raw_PV_installations_on_rooftop,
             )
-        )
-
-        # Check if the identifier of the intersected polygon is the same as the identifier of the overhanging polygon
-        raw_overhanging_pv_installations_enriched_with_closest_rooftop_data[
-            "checker"
-        ] = (
-            raw_overhanging_pv_installations_enriched_with_closest_rooftop_data[
-                "identifier_diff"
-            ]
-            == raw_overhanging_pv_installations_enriched_with_closest_rooftop_data[
-                "identifier"
-            ]
         )
 
         # Calculate the distance in meters between the centroid of the overhanging PV polygon and the centroid of the
