@@ -6,11 +6,37 @@ Repo with [documentation](docs/_build/rinoh/pv4ger.pdf) for "An Enriched Automat
 
 PV4GER is a joint research initiative between [Stanford University](http://web.stanford.edu/group/energyatlas/home.html), [University of Freiburg](https://www.is.uni-freiburg.de/research/smart-cities-industries-group/smart-cities-industries-sci-group), and [LMU Munich](https://www.en.compecon.econ.uni-muenchen.de/staff/postdocs/arlt1/index.html) that aims at democratizing and accelerating the access to photovoltaic (PV) systems data in Germany and beyond. 
 
-To do so, we have developed a computer vision-based pipeline leveraging aerial imagery with a spatial resolution of 10 cm/pixel and 3D building data to automatically create address-level PV registries for all counties within Germany's most populous state North Rhine-Westphalia. For every PV system in North Rhine-Westphalia, the automatically produced registry in GeoJSON-format specifies a system's: 
+To do so, we have developed a computer vision-based pipeline leveraging aerial imagery with a spatial resolution of
+10 cm/pixel and 3D building data to automatically create address-level and rooftop-level PV registries for all counties
+within Germany's most populous state North Rhine-Westphalia. 
 
-- capacity 
-- area (corrected by considering the rooftop's tilt)
-- location in latitude and longitude 
+### Address-level registry
+
+For every address equipped with a PV system in North Rhine-Westphalia, the automatically produced address-level
+registry in GeoJSON-format specifies the respective PV system's: 
+
+- area_inter: The total area covered by the PV system in square meters
+- area_tilted: The total area covered by the PV system in square meters, corrected by the respective rooftop tilt
+- capacity_not_tilted_area: The total PV capacity in kWp of area_inter
+- capacity_titled_area: The total PV capacity in kWp of area_tilted 
+- location of street address in latitude and longitude 
+- street address
+- city and
+- ZIP code
+
+### Rooftop-level registry
+
+For every rooftop equipped with a PV system in North Rhine-Westphalia, the automatically produced rooftop-level
+registry in GeoJSON-format specifies the respective PV system's: 
+
+- Azimuth: Orientation of the rooftop-mounted PV system, with 0° pointing to the North
+- Tilt: Tilt of the rooftop-mounted PV system, with 0° being flat
+- RoofTopID: Identifier of the respective rooftop
+- geometry: Real-world coordinate-referenced polygon describing the shape of the rooftop-mounted PV system
+- area_inter: The total area covered by the PV system in square meters
+- area_tilted: The total area covered by the PV system in square meters, corrected by the respective rooftop tilt
+- capacity_not_tilted_area: The total PV capacity in kWp of area_inter
+- capacity_titled_area: The total PV capacity in kWp of area_tilted
 - street address
 - city and
 - ZIP code
@@ -74,20 +100,22 @@ Lastly, to create PV registries for any county within North Rhine-Westphalia, yo
     Example for the county of **Essen**:
     
         aws s3 cp --request-payer requester s3://pv4ger/NRW_rooftop_data/Essen.geojson data/nrw_rooftop_data/
-     
-2. Obtain your Bing API key for geocoding from [here](https://docs.microsoft.com/en-us/bingmaps/getting-started/bing-maps-dev-center-help/getting-a-bing-maps-key) and paste it in the config.yml file next to the "bing_key" element
 
-    Example:
-    
-        bing_key: <YOUR_BING_KEY>
-        
-    **NOTE**: You only need a Bing API key, if you intend to run the registry_creator.py script which is the last pipeline step and creates the address-level PV    registry. In case you are only interested in finding the PV locations and the PV polygons, you do neither need to run registry_creator.py nor obtain a Bing      API key.
-
-3. Specify the name of your desired county for analysis in the config.yml next to the "county4analysis" element by choosing one of the counties from the list below:
+2. Specify the name of your desired county for analysis in the config.yml next to the "county4analysis" element by
+ choosing one of the counties from the list below:
 
     Example:
         
         county4analysis: Essen
+        
+3. **OPTIONAL STEP**: Obtain your Bing API key for geocoding from [here](https://docs.microsoft.com/en-us/bingmaps
+/getting-started/bing-maps-dev-center-help/getting-a-bing-maps-key) and paste it in the config.yml file next to the "bing_key" element
+
+    Example:
+    
+        bing_key: <YOUR_BING_KEY>
+    
+    **NOTE**: If you leave <YOUR_BING_KEY> empty, geocoding will be done by the free OSM geocoding service.
 
 4. Put a "1" next to all the pipeline steps that you would like to run
 
