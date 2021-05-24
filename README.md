@@ -17,11 +17,11 @@ within Germany's most populous state North Rhine-Westphalia.
 For every address equipped with a PV system in North Rhine-Westphalia, the automatically produced address-level
 registry in GeoJSON-format specifies the respective PV system's: 
 
+- geometry: Real-world coordinate-referenced polygon describing the shape of the rooftop-mounted PV system
 - area_inter: The total area covered by the PV system in square meters
 - area_tilted: The total area covered by the PV system in square meters, corrected by the respective rooftop tilt
 - capacity_not_tilted_area: The total PV capacity in kWp of area_inter
-- capacity_titled_area: The total PV capacity in kWp of area_tilted
-- geometry: Real-world coordinate-referenced polygon describing the shape of the rooftop-mounted PV system 
+- capacity_titled_area: The total PV capacity in kWp of area_tilted 
 - location of street address in latitude and longitude 
 - street address
 - city and
