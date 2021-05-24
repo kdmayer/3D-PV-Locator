@@ -91,8 +91,8 @@ Please download our pre-trained networks for PV system classification and segmen
     
 Next, set up your conda environment with all required dependencies by executing
 
-    conda create --name PV4GER --file requirements.txt
-    conda activate PV4GER
+    conda env create --file environment.yml
+    conda activate pv4ger
     
 Lastly, to create PV registries for any county within North Rhine-Westphalia, you need to 
 
