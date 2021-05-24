@@ -16,7 +16,8 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Optional Pipeline Step: Tile Updater" href="tile_updater.html" /> 
+    <link rel="next" title="Supplementary Information" href="supplementary_info.html" />
+    <link rel="prev" title="Optional Step: Tile Updater" href="tile_updater.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -28,7 +29,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="tile_updater.html" title="Optional Pipeline Step: Tile Updater"
+          <a href="supplementary_info.html" title="Supplementary Information"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="tile_updater.html" title="Optional Step: Tile Updater"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">PV4GER 0.0.1 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Pipeline Step 4: Registry Creator</a></li> 
@@ -45,21 +49,270 @@
 <span class="target" id="module-src.pipeline_components.registry_creator"></span><dl class="py class">
 <dt id="src.pipeline_components.registry_creator.RegistryCreator">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">src.pipeline_components.registry_creator.</span></code><code class="sig-name descname"><span class="pre">RegistryCreator</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.pipeline_components.registry_creator.RegistryCreator" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates an address-level PV registry for the specified county by bringing together the information obtained from the tile processing step with the county’s 3D rooftop data.</p>
-<dl class="simple">
-<dt>county<span class="classifier">str</span></dt><dd><p>Name of the county for which the enrichted automated PV registry is created.</p>
-</dd>
-<dt>PV_gdf<span class="classifier">GeoDataFrame</span></dt><dd><p>Contains all the identified and segmented PV panels within a given county based on the results from the previous tile processing step.</p>
-</dd>
-<dt>rooftop_gdf<span class="classifier">GeoDataFrame</span></dt><dd><p>Contains all the rooftop information such as a rooftop’s tilt, its azimuth, and its geo-referenced polygon derived from openNRW’s 3D building data.</p>
-</dd>
-<dt>bing_key<span class="classifier">str</span></dt><dd><p>Your Bing API key which is needed to reverse geocode lat, lon values into actual street addresses.</p>
+<dd><p>Creates an address-level and rooftop-level PV registry for the specified county by bringing together the
+information obtained from the tile processing step with the county’s 3D rooftop data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>county</strong> (<em>str</em>) – Name of the county for which the enrichted automated PV registry is created.</p></li>
+<li><p><strong>raw_PV_polygons_gdf</strong> (<em>GeoPandas.GeoDataFrame</em>) – Contains all the identified and segmented PV panels within a given county based on the results from the previous tile processing step.</p></li>
+<li><p><strong>rooftop_gdf</strong> (<em>GeoPandas.GeoDataFrame</em>) – Contains all the rooftop information such as a rooftop’s tilt, its azimuth, and its geo-referenced polygon derived from openNRW’s 3D building data.</p></li>
+<li><p><strong>bing_key</strong> (<em>str</em>) – Your Bing API key which is needed to reverse geocode lat, lon values into actual street addresses.</p></li>
+<li><p><strong>corrected_PV_installations_on_rooftop</strong> (<em>GeoPandas.GeoDataFrame</em>) – GeoDataFrame with preprocessed PV polygons matched to their respective rooftop segments</p></li>
+</ul>
 </dd>
 </dl>
 <dl class="py method">
-<dt id="src.pipeline_components.registry_creator.RegistryCreator.run">
-<code class="sig-name descname"><span class="pre">run</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.pipeline_components.registry_creator.RegistryCreator.run" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create an address-level PV registry by matching identified and segmented PV panels with their respective rooftop segments.</p>
+<dt id="src.pipeline_components.registry_creator.RegistryCreator.adjust_detected_pv_area_by_tilt">
+<code class="sig-name descname"><span class="pre">adjust_detected_pv_area_by_tilt</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw_PV_installations_on_rooftop</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">geopandas.geodataframe.GeoDataFrame</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">geopandas.geodataframe.GeoDataFrame</span><a class="headerlink" href="#src.pipeline_components.registry_creator.RegistryCreator.adjust_detected_pv_area_by_tilt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adjusts detected PV area by considering the rooftop’s tilt</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>raw_PV_installations_on_rooftop</strong> (<em>GeoPandas.GeoDataFrame</em>) – GeoDataFrame which must contain the columns “Tilt” and “area_inter”</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Input GeoDataFrame extended by an additional column named “area_tilted” which adjusts
+the detected PV area by considering the rooftop’s tilt</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>GeoPandas.GeoDataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="src.pipeline_components.registry_creator.RegistryCreator.aggregate_raw_PV_polygons_to_raw_PV_installations">
+<code class="sig-name descname"><span class="pre">aggregate_raw_PV_polygons_to_raw_PV_installations</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw_PV_polygons_gdf</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">geopandas.geodataframe.GeoDataFrame</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">geopandas.geodataframe.GeoDataFrame</span><a class="headerlink" href="#src.pipeline_components.registry_creator.RegistryCreator.aggregate_raw_PV_polygons_to_raw_PV_installations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Aggregate raw PV polygons belonging to the same PV installation. Raw refers to the fact that the PV area is
+not corrected by the tilt angle. For each PV installation, we compute its raw area and a unique identifier.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>raw_PV_polygons_gdf</strong> (<em>GeoPandas.GeoDataFrame</em>) – GeoDataFrame which contains all the raw PV polygons which have been detected during the previous pipeline step.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>GeoDataFrame with dissolved PV polygon geometries.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>GeoPandas.GeoDataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="src.pipeline_components.registry_creator.RegistryCreator.append_raw_overhanging_PV_installations_to_intersected_installations">
+<code class="sig-name descname"><span class="pre">append_raw_overhanging_PV_installations_to_intersected_installations</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw_overhanging_PV_installations</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">geopandas.geodataframe.GeoDataFrame</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raw_PV_installations_on_rooftop</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">geopandas.geodataframe.GeoDataFrame</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">geopandas.geodataframe.GeoDataFrame</span><a class="headerlink" href="#src.pipeline_components.registry_creator.RegistryCreator.append_raw_overhanging_PV_installations_to_intersected_installations" title="Permalink to this definition">¶</a></dt>
+<dd><p>PV polygons which do not intersect with a rooftop polygon, although they do border to a rooftop, are matched to
+their nearest rooftop geometry and appended to the GeoDataFrame listing all rooftop PV polygons</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>raw_overhanging_PV_installations</strong> (<em>GeoPandas.GeoDataFrame</em>) – GeoDataFrame which specifies all the PV polygons which border to a rooftop, but are not intersected with
+a rooftop geometry</p></li>
+<li><p><strong>raw_PV_installations_on_rooftop</strong> (<em>GeoPandas.GeoDataFrame</em>) – GeoDataFrame which specifies all the PV polygons which are intersected with a rooftop geometry</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>GeoDataFrame where overhanging PV installations have been enriched with the attributes of the closest
+rooftop and appended to raw_PV_installations_on_rooftop</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>GeoPandas.GeoDataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="src.pipeline_components.registry_creator.RegistryCreator.calculate_distance_in_meters_between_raw_overhanging_pv_installation_centroid_and_nearest_intersected_installation_centroid">
+<code class="sig-name descname"><span class="pre">calculate_distance_in_meters_between_raw_overhanging_pv_installation_centroid_and_nearest_intersected_installation_centroid</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw_overhanging_pv_installations_enriched_with_closest_rooftop_data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">geopandas.geodataframe.GeoDataFrame</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.pipeline_components.registry_creator.RegistryCreator.calculate_distance_in_meters_between_raw_overhanging_pv_installation_centroid_and_nearest_intersected_installation_centroid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the distance in meters between the centroid of the overhanging PV polygon, here points_no_data,
+and the PV polygon centroid which is intersected with a rooftop polygon, here address_points</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>raw_overhanging_pv_installations_enriched_with_closest_rooftop_data</strong> (<em>GeoPandas.GeoDataFrame</em>) – GeoDataFrame where overhanging PV installations have been enriched with the attributes of the closest
+rooftop</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>GeoDataFrame where overhanging PV installations have been enriched with the attributes of the closest
+rooftop with an additional attribute which specifies the distance between the centroid of the overhanging PV polygon and the centroid of the intersected PV polygon in meters</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>GeoPandas.GeoDataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="src.pipeline_components.registry_creator.RegistryCreator.calculate_pv_capacity">
+<code class="sig-name descname"><span class="pre">calculate_pv_capacity</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">registry</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">geopandas.geodataframe.GeoDataFrame</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">geopandas.geodataframe.GeoDataFrame</span><a class="headerlink" href="#src.pipeline_components.registry_creator.RegistryCreator.calculate_pv_capacity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts the detected PV area into a PV capacity estimate</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>registry</strong> (<em>GeoPandas.GeoDataFrame</em>) – GeoDataFrame which must contain the columns “area_inter” and “area_tilted”</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Input GeoDataFrame extended by two additional columns named “capacity_not_tilted_area” and
+“capacity_tilted_area”</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>GeoPandas.GeoDataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="src.pipeline_components.registry_creator.RegistryCreator.clip_incorrect_tilts">
+<code class="sig-name descname"><span class="pre">clip_incorrect_tilts</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw_PV_installations_on_rooftop</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">geopandas.geodataframe.GeoDataFrame</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">geopandas.geodataframe.GeoDataFrame</span><a class="headerlink" href="#src.pipeline_components.registry_creator.RegistryCreator.clip_incorrect_tilts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adjusts tilts which are determined to be unreasonable to standard values</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>raw_PV_installations_on_rooftop</strong> (<em>GeoPandas.GeoDataFrame</em>) – GeoDataFrame which must contain the column “Tilt”</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Input GeoDataFrame where values in the “Tilt” are adjusted to standard values if they are deemed to be
+incorrect</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>GeoPandas.GeoDataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="src.pipeline_components.registry_creator.RegistryCreator.create_address_registry">
+<code class="sig-name descname"><span class="pre">create_address_registry</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.pipeline_components.registry_creator.RegistryCreator.create_address_registry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an address-level PV registry by grouping identified and segmented PV panels
+by their address.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="src.pipeline_components.registry_creator.RegistryCreator.create_rooftop_registry">
+<code class="sig-name descname"><span class="pre">create_rooftop_registry</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.pipeline_components.registry_creator.RegistryCreator.create_rooftop_registry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a rooftop-level PV registry by grouping identified and segmented PV panels by their rooftop id</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="src.pipeline_components.registry_creator.RegistryCreator.enrich_raw_overhanging_pv_installations_with_closest_rooftop_attributes">
+<code class="sig-name descname"><span class="pre">enrich_raw_overhanging_pv_installations_with_closest_rooftop_attributes</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw_overhanging_PV_installations</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">geopandas.geodataframe.GeoDataFrame</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raw_PV_installations_on_rooftop</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">geopandas.geodataframe.GeoDataFrame</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">geopandas.geodataframe.GeoDataFrame</span><a class="headerlink" href="#src.pipeline_components.registry_creator.RegistryCreator.enrich_raw_overhanging_pv_installations_with_closest_rooftop_attributes" title="Permalink to this definition">¶</a></dt>
+<dd><p>PV polygons which do not intersect with a rooftop polygon, although they do border to a rooftop, are matched to
+their nearest rooftop geometry</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>raw_overhanging_PV_installations</strong> (<em>GeoPandas.GeoDataFrame</em>) – GeoDataFrame which specifies all the PV polygons which border to a rooftop, but are not intersected with
+a rooftop geometry</p></li>
+<li><p><strong>raw_PV_installations_on_rooftop</strong> (<em>GeoPandas.GeoDataFrame</em>) – GeoDataFrame which specifies all the PV polygons which are intersected with a rooftop geometry</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>GeoDataFrame where overhanging PV installations have been enriched with the attributes of the closest
+rooftop</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>GeoPandas.GeoDataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="src.pipeline_components.registry_creator.RegistryCreator.filter_raw_overhanging_PV_installations_by_area">
+<code class="sig-name descname"><span class="pre">filter_raw_overhanging_PV_installations_by_area</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw_overhanging_PV_installations</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">geopandas.geodataframe.GeoDataFrame</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raw_PV_installations_on_rooftop</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">geopandas.geodataframe.GeoDataFrame</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">geopandas.geodataframe.GeoDataFrame</span><a class="headerlink" href="#src.pipeline_components.registry_creator.RegistryCreator.filter_raw_overhanging_PV_installations_by_area" title="Permalink to this definition">¶</a></dt>
+<dd><p>Only overhanging PV polygons which are larger than 1 sqm in area will be kept.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>raw_overhanging_PV_installations</strong> (<em>GeoPandas.GeoDataFrame</em>) – GeoDataFrame which specifies all the PV polygons which border to a rooftop geometry.</p></li>
+<li><p><strong>raw_PV_installations_on_rooftop</strong> (<em>GeoPandas.GeoDataFrame</em>) – GeoDataFrame which specifies all the PV polygons which are intersected with a rooftop geometry</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>GeoDataFrame where overhanging PV installations have been filtered to contain only
+those which border to a rooftop and are larger than 1 sqm in area</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>GeoPandas.GeoDataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="src.pipeline_components.registry_creator.RegistryCreator.identify_raw_overhanging_PV_installations">
+<code class="sig-name descname"><span class="pre">identify_raw_overhanging_PV_installations</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw_PV_installations_off_rooftop</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">geopandas.geodataframe.GeoDataFrame</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">geopandas.geodataframe.GeoDataFrame</span><a class="headerlink" href="#src.pipeline_components.registry_creator.RegistryCreator.identify_raw_overhanging_PV_installations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove PV systems from raw_PV_installations_off_rooftop which are free-standing, i.e. only use the ones
+belonging, i.e. bordering, to a rooftop.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>raw_PV_installations_off_rooftop</strong> (<em>GeoPandas.GeoDataFrame</em>) – GeoDataFrame which specifies all the PV polygons which do not intersect with a rooftop geometry. This
+includes free-standing PV systems and PV polygons which border to a rooftop, but couldn’t be matched to
+that rooftop geometry initially.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>GeoDataFrame which specifies all the PV polygons which border to a rooftop geometry but are not yet
+matched with the attributes of the correspoding rooftop. All free-standing PV
+system units, i.e. those which are not mounted on a rooftop, have been removed.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>GeoPandas.GeoDataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="src.pipeline_components.registry_creator.RegistryCreator.overlay_raw_PV_installations_and_rooftops">
+<code class="sig-name descname"><span class="pre">overlay_raw_PV_installations_and_rooftops</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw_PV_installations_gdf</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">geopandas.geodataframe.GeoDataFrame</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rooftop_gdf</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">geopandas.geodataframe.GeoDataFrame</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">geopandas.geodataframe.GeoDataFrame</span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#src.pipeline_components.registry_creator.RegistryCreator.overlay_raw_PV_installations_and_rooftops" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overlay PV polygon geometries with rooftop geometries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>raw_PV_installations_gdf</strong> (<em>GeoPandas.GeoDataFrame</em>) – GeoDataFrame with dissolved PV polygon geometries.</p></li>
+<li><p><strong>rooftop_gdf</strong> (<em>GeoPandas.GeoDataFrame</em>) – GeoDataFrame specifying all rooftop geometries in a given county.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The first element specifies PV polygons intersected with rooftop geometries, while the second element
+specifies PV polygons which do not intersect with rooftop geometries</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>List[GeoPandas.GeoDataFrame]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="src.pipeline_components.registry_creator.RegistryCreator.preprocess_raw_pv_polygons">
+<code class="sig-name descname"><span class="pre">preprocess_raw_pv_polygons</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw_PV_polygons_gdf</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">geopandas.geodataframe.GeoDataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rooftop_gdf</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">geopandas.geodataframe.GeoDataFrame</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">geopandas.geodataframe.GeoDataFrame</span><a class="headerlink" href="#src.pipeline_components.registry_creator.RegistryCreator.preprocess_raw_pv_polygons" title="Permalink to this definition">¶</a></dt>
+<dd><p>Preprocessing the raw PV polygons detected during the previous pipeline step.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>raw_PV_polygons_gdf</strong> (<em>GeoPandas.GeoDataFrame</em>) – GeoPandas.GeoDataFrame consisting of all detected PV polygons from the previous pipeline step.</p></li>
+<li><p><strong>rooftop_gdf</strong> (<em>GeoPandas.GeoDataFrame</em>) – GeoPandas.GeoDataFrame specifying all rooftop geometries and attributes within the given county</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>GeoPandas.GeoDataFrame specifying all rooftop intersected PV polygons within a given county
+together with the corresponding rooftop attributes and the PV system area corrected by the rooftop’s tilt.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>GeoPandas.GeoDataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="src.pipeline_components.registry_creator.RegistryCreator.remove_erroneous_pv_polygons">
+<code class="sig-name descname"><span class="pre">remove_erroneous_pv_polygons</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw_PV_installations_on_rooftop</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">geopandas.geodataframe.GeoDataFrame</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">geopandas.geodataframe.GeoDataFrame</span><a class="headerlink" href="#src.pipeline_components.registry_creator.RegistryCreator.remove_erroneous_pv_polygons" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes PV polygons whose aggregated intersected area is larger than their original raw area</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>raw_PV_installations_on_rooftop</strong> (<em>GeoPandas.GeoDataFrame</em>) – GeoDataFrame which must contain the columns “area_inter”, “raw_area”, and “identifier”</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Input GeoDataFrame where erroneous PV polygons have been removed</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>GeoPandas.GeoDataFrame</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -75,7 +328,10 @@
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
   <p class="topless"><a href="tile_updater.html"
-                        title="previous chapter">Optional Pipeline Step: Tile Updater</a></p>
+                        title="previous chapter">Optional Step: Tile Updater</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="supplementary_info.html"
+                        title="next chapter">Supplementary Information</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -107,7 +363,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="tile_updater.html" title="Optional Pipeline Step: Tile Updater"
+          <a href="supplementary_info.html" title="Supplementary Information"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="tile_updater.html" title="Optional Step: Tile Updater"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">PV4GER 0.0.1 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Pipeline Step 4: Registry Creator</a></li> 
