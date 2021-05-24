@@ -831,7 +831,7 @@ class RegistryCreator:
 
         # You cannot save two columns with shapely objects to a geojson file. We drop the polygon geometries and save
         # the geocoded street address instead.
-        self.address_registry.drop(["geometry"], axis=1, inplace=True)
+        #self.address_registry.drop(["geometry"], axis=1, inplace=True)
 
         # Reset index for subsequent nearest neighbor search
         self.address_registry.reset_index(drop=True, inplace=True)
@@ -842,9 +842,9 @@ class RegistryCreator:
             addresses=addresses, bing_key=self.bing_key
         )
 
-        street_address_coords = gpd.GeoSeries(
+        street_address_coords = pd.Series(
             [
-                Point(coord[1], coord[0])
+                f"{coord[1]}, {coord[0]}"
                 for coord in coordinates
                 if isinstance(coord, list)
             ]
@@ -854,7 +854,7 @@ class RegistryCreator:
             [self.address_registry, street_address_coords], axis=1
         )
 
-        self.address_registry = self.address_registry.rename(columns={0: "geometry"})
+        self.address_registry = self.address_registry.rename(columns={0: "geocoded_street_address"})
 
         self.address_registry = self.calculate_pv_capacity(self.address_registry)
 

@@ -1,6 +1,6 @@
 # PV4GER
 
-![Pipeline overview](https://github.com/kdmayer/PV4GER/blob/master/pipeline_visualization.png)
+![Pipeline Overview](https://github.com/kdmayer/PV4GER/blob/master/pipeline_visualization.png)
 
 Repo with [documentation](docs/_build/rinoh/pv4ger.pdf) for "An Enriched Automated PV Registry: Combining Image Recognition and 3D Building Data" published at the "Tackling Climate Change with AI" workshop at NeurIPS 2020.
 
@@ -8,7 +8,9 @@ PV4GER is a joint research initiative between [Stanford University](http://web.s
 
 To do so, we have developed a computer vision-based pipeline leveraging aerial imagery with a spatial resolution of
 10 cm/pixel and 3D building data to automatically create address-level and rooftop-level PV registries for all counties
-within Germany's most populous state North Rhine-Westphalia. 
+within Germany's most populous state North Rhine-Westphalia.
+
+![Exemplary Pipeline Output](https://github.com/kdmayer/PV4GER/blob/master/exemplary_pipeline_output.png) 
 
 ### Address-level registry
 
@@ -18,7 +20,8 @@ registry in GeoJSON-format specifies the respective PV system's:
 - area_inter: The total area covered by the PV system in square meters
 - area_tilted: The total area covered by the PV system in square meters, corrected by the respective rooftop tilt
 - capacity_not_tilted_area: The total PV capacity in kWp of area_inter
-- capacity_titled_area: The total PV capacity in kWp of area_tilted 
+- capacity_titled_area: The total PV capacity in kWp of area_tilted
+- geometry: Real-world coordinate-referenced polygon describing the shape of the rooftop-mounted PV system 
 - location of street address in latitude and longitude 
 - street address
 - city and
