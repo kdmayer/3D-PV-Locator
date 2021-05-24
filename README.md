@@ -111,8 +111,7 @@ Lastly, to create PV registries for any county within North Rhine-Westphalia, yo
         
         county4analysis: Essen
         
-3. **OPTIONAL STEP**: Obtain your Bing API key for geocoding from [here](https://docs.microsoft.com/en-us/bingmaps
-/getting-started/bing-maps-dev-center-help/getting-a-bing-maps-key) and paste it in the config.yml file next to the "bing_key" element
+3. **OPTIONAL STEP**: Obtain your Bing API key for geocoding from [here](https://docs.microsoft.com/en-us/bingmaps/getting-started/bing-maps-dev-center-help/getting-a-bing-maps-key) and paste it in the config.yml file next to the "bing_key" element
 
     Example:
     
