@@ -71,19 +71,12 @@ class RegistryCreator:
         """
 
         self.county = configuration.get("county4analysis")
-        # replace with f"/data/pv_database/{self.county}_PV_db.csv"
         self.raw_PV_polygons_gdf = RawSolarDatabase().from_csv(
-            Path(
-                f"/Users/kevin/Projects/Active/PV4GERFiles/pv4ger/data/pv_database/{self.county}_PV_db.csv"
-            )
+            Path(f"data/pv_database/{self.county}_PV_db.csv")
         )
 
-        # replace with Path(f"{configuration['rooftop_data_dir']}/{self.county}_Clipped.geojson")
         self.rooftop_gdf = gpd.read_file(
-            Path(
-                f"/Users/kevin/Projects/Active/PV4GERFiles/pv4ger/{configuration['rooftop_data_dir']}"
-                f"/{self.county}_Clipped.geojson"
-            )
+            Path(f"{configuration['rooftop_data_dir']}/{self.county}.geojson")
         )
         self.rooftop_gdf.crs = {"init": "epsg:4326"}
 
@@ -814,7 +807,7 @@ class RegistryCreator:
 
         self.rooftop_registry.to_file(
             driver="GeoJSON",
-            filename=f"/Users/kevin/Projects/Active/PV4GERFiles/pv4ger/data/pv_registry/{self.county}_rooftop_registry.geojson",
+            filename=f"data/pv_registry/{self.county}_rooftop_registry.geojson",
         )
 
     def create_address_registry(self):
@@ -867,18 +860,5 @@ class RegistryCreator:
 
         self.address_registry.to_file(
             driver="GeoJSON",
-            filename=f"/Users/kevin/Projects/Active/PV4GERFiles/pv4ger/data/pv_registry/{self.county}_address_registry.geojson",
+            filename=f"data/pv_registry/{self.county}_address_registry.geojson",
         )
-
-
-if __name__ == "__main__":
-
-    import yaml
-
-    config_file = "/Users/kevin/Projects/Active/PV4GERFiles/pv4ger/config.yml"
-
-    with open(config_file, "rb") as f:
-
-        conf = yaml.load(f, Loader=yaml.FullLoader)
-
-    RegistryCreator(conf).create_address_registry()
