@@ -10,8 +10,6 @@ To do so, we have developed a computer vision-based pipeline leveraging aerial i
 10 cm/pixel and 3D building data to automatically create address-level and rooftop-level PV registries for all counties
 within Germany's most populous state North Rhine-Westphalia.
 
-![Exemplary Pipeline Output](https://github.com/kdmayer/PV4GER/blob/master/exemplary_pipeline_output.png) 
-
 ### Address-level registry
 
 For every address equipped with a PV system in North Rhine-Westphalia, the automatically produced address-level
@@ -43,6 +41,8 @@ registry in GeoJSON-format specifies the respective PV system's:
 - street address
 - city and
 - ZIP code
+
+![Exemplary Pipeline Output](https://github.com/kdmayer/PV4GER/blob/master/exemplary_pipeline_output.png) 
 
 For a detailed description of the underlying pipeline and a case study for the city of Bottrop, please have a look at our spotlight talk at NeurIPS 2020:
 
