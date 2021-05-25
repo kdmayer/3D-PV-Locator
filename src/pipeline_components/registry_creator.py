@@ -861,4 +861,11 @@ class RegistryCreator:
         self.address_registry.to_file(
             driver="GeoJSON",
             filename=f"data/pv_registry/{self.county}_address_registry.geojson",
-        )
+        ) 
+        
+    @staticmethod
+    def double_input(x):
+        
+        return 2*x
+        
+        

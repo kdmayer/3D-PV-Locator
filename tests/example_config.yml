@@ -1,0 +1,51 @@
+# Configuration
+
+# -------- Geocoder --------
+# Your Bing API key to geocode addresses. Only needed if you run the final pipeline step, i.e. "run_registry_creator: 1"
+bing_key:
+
+# -------- Area of interest --------
+# Specify the county for which you would like to run the analysis. Feel free to replace "Essen" by any other name from the list of available counties.
+county4analysis: Essen
+
+# -------- Pipeline --------
+# Which part of the pipeline do you want to execute?
+run_tile_creator: 0
+
+run_tile_downloader: 0
+
+run_tile_processor: 0
+
+run_tile_coords_updater: 0
+
+run_registry_creator: 1
+
+# -------- Data --------
+# Geo-referenced polygon data for all counties in NRW
+nrw_county_data_path: data/nrw_county_data/nrw_counties.geojson
+
+# DIR where tiles are saved
+tile_dir: data/tiles
+
+# Path to rooftop data file for
+rooftop_data_dir: data/nrw_rooftop_data/
+
+# -------- Model Configuration --------
+# Classification threshold
+cls_threshold: 0.68
+
+# Segmentation threshold:
+seg_threshold: 0.55
+
+# Input resolution for CNN, is fixed for Inception-v3
+input_size: 299
+
+# Batch size should be as large as possible to speed up the classification process
+batch_size: 4
+
+# -------- Model Checkpoint --------
+# Path for loading classification model weights
+cls_checkpoint_path: models/classification/inceptionv3_weights.tar
+
+# Path for loading segmentation model weights
+seg_checkpoint_path: models/segmentation/deeplabv3_weights.tar
