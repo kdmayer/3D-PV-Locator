@@ -1,16 +1,16 @@
-# PV4GER
+# 3D-PV-Locator
 
-![Pipeline Overview](https://github.com/kdmayer/PV4GER/blob/master/pipeline_visualization.png)
+![Pipeline Overview](https://github.com/kdmayer/3D-PV-Locator/blob/master/pipeline_visualization.png)
 
 Repo with [documentation](docs/_build/rinoh/pv4ger.pdf) for "An Enriched Automated PV Registry: Combining Image Recognition and 3D Building Data" published at the "Tackling Climate Change with AI" workshop at NeurIPS 2020.
 
-PV4GER is a joint research initiative between [Stanford University](http://web.stanford.edu/group/energyatlas/home.html), [University of Freiburg](https://www.is.uni-freiburg.de/research/smart-cities-industries-group/smart-cities-industries-sci-group), and [LMU Munich](https://www.en.compecon.econ.uni-muenchen.de/staff/postdocs/arlt1/index.html) that aims at democratizing and accelerating the access to photovoltaic (PV) systems data in Germany and beyond. 
+3D-PV-Locator is a joint research initiative between [Stanford University](http://web.stanford.edu/group/energyatlas/home.html), [University of Freiburg](https://www.is.uni-freiburg.de/research/smart-cities-industries-group/smart-cities-industries-sci-group), and [LMU Munich](https://www.en.compecon.econ.uni-muenchen.de/staff/postdocs/arlt1/index.html) that aims at democratizing and accelerating the access to photovoltaic (PV) systems data in Germany and beyond. 
 
 To do so, we have developed a computer vision-based pipeline leveraging aerial imagery with a spatial resolution of
 10 cm/pixel and 3D building data to automatically create address-level and rooftop-level PV registries for all counties
 within Germany's most populous state North Rhine-Westphalia.
 
-![Exemplary Pipeline Output](https://github.com/kdmayer/PV4GER/blob/master/exemplary_pipeline_output.png)
+![Exemplary Pipeline Output](https://github.com/kdmayer/3D-PV-Locator/blob/master/exemplary_pipeline_output.png)
 
 ### Address-level registry
 
@@ -71,8 +71,8 @@ In case you use any of these, please cite our work as specified at the bottom of
 
 ## Usage Instructions:
 
-    git clone https://github.com/kdmayer/PV4GER.git
-    cd PV4GER
+    git clone https://github.com/kdmayer/3D-PV-Locator.git
+    cd 3D-PV-Locator
 
 Download pre-trained classification and segmentation models for PV systems from our public AWS S3 bucket. This bucket is in "requester pays" mode, which means that you need to configure your AWS CLI before being able to download the files. Instructions on how to do it can be found [here](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html).
 
