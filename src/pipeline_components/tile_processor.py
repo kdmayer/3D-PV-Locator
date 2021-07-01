@@ -304,60 +304,62 @@ class TileProcessor(object):
             img_batch = images[self.batch_size * k:]
             coords4batch = coords[self.batch_size * k:]
 
-            batch4cls = [torch.unsqueeze(trans_cls(Image.fromarray(image)), 0) for image in img_batch]
-            batch4seg = [torch.unsqueeze(trans_seg(Image.fromarray(image)), 0) for image in img_batch]
+            if len(img_batch) > 0:
 
-            batch4cls = torch.cat(batch4cls, dim=0)
-            batch4seg = torch.cat(batch4seg, dim=0)
+                batch4cls = [torch.unsqueeze(trans_cls(Image.fromarray(image)), 0) for image in img_batch]
+                batch4seg = [torch.unsqueeze(trans_seg(Image.fromarray(image)), 0) for image in img_batch]
 
-            # Classify batch
-            cls_outputs = self.cls_model(batch4cls.to(self.device))
+                batch4cls = torch.cat(batch4cls, dim=0)
+                batch4seg = torch.cat(batch4seg, dim=0)
 
-            cls_prob = F.softmax(cls_outputs, dim=1)
-            cls_prob = cls_prob.cpu().detach().numpy()
+                # Classify batch
+                cls_outputs = self.cls_model(batch4cls.to(self.device))
 
-            # PV_bool is a boolean array in which TRUE values correspond to images in our batch which depict PV systems
-            PV_bool = cls_prob[:, 1] >= self.cls_threshold
+                cls_prob = F.softmax(cls_outputs, dim=1)
+                cls_prob = cls_prob.cpu().detach().numpy()
 
-            # If our batch contains positively classified images, we pass them to the segmentation model
-            if PV_bool.sum() > 0:
+                # PV_bool is a boolean array in which TRUE values correspond to images in our batch which depict PV systems
+                PV_bool = cls_prob[:, 1] >= self.cls_threshold
 
-                # Select all images which depict PV systems and their respective coordinates (upper left image corner)
-                batch4seg = batch4seg[PV_bool]
-                coords4seg = list(compress(coords4batch, PV_bool))
-                # self.seg_model.cuda()
-                seg_outputs = self.seg_model(batch4seg)
-                seg_outputs = seg_outputs['out'].squeeze(1)
-                seg_outputs = seg_outputs.detach().cpu().numpy()
-                # min-max scaling
-                seg_outputs = (seg_outputs - np.min(seg_outputs)) / (
-                            np.max(seg_outputs) - np.min(seg_outputs) + 0.000000001)
-                # setting a threshold to turn CAMs into binary segmentation masks
-                seg_outputs = seg_outputs >= self.seg_threshold
-                # Turn class activation maps (CAMs) into binary segmentation masks
-                seg_masks = [CAM.astype(np.int32) for CAM in seg_outputs]
-                # Only consider binary segmentation masks with at least one positive pixel
-                # I.e. ignore instances where an image is positively classified, but the segmentation model does not activate any pixels
-                PV_bool_seg = [True if seg_mask.sum() >= 1 else False for seg_mask in seg_masks]
-                PV_masks = list(compress(seg_masks, PV_bool_seg))
-                PV_image_coords = list(compress(coords4seg, PV_bool_seg))
+                # If our batch contains positively classified images, we pass them to the segmentation model
+                if PV_bool.sum() > 0:
 
-                # Iterate over all PV masks and store the polygon for each detected PV system in a .csv file
-                for idx, mask in enumerate(PV_masks):
+                    # Select all images which depict PV systems and their respective coordinates (upper left image corner)
+                    batch4seg = batch4seg[PV_bool]
+                    coords4seg = list(compress(coords4batch, PV_bool))
+                    # self.seg_model.cuda()
+                    seg_outputs = self.seg_model(batch4seg)
+                    seg_outputs = seg_outputs['out'].squeeze(1)
+                    seg_outputs = seg_outputs.detach().cpu().numpy()
+                    # min-max scaling
+                    seg_outputs = (seg_outputs - np.min(seg_outputs)) / (
+                                np.max(seg_outputs) - np.min(seg_outputs) + 0.000000001)
+                    # setting a threshold to turn CAMs into binary segmentation masks
+                    seg_outputs = seg_outputs >= self.seg_threshold
+                    # Turn class activation maps (CAMs) into binary segmentation masks
+                    seg_masks = [CAM.astype(np.int32) for CAM in seg_outputs]
+                    # Only consider binary segmentation masks with at least one positive pixel
+                    # I.e. ignore instances where an image is positively classified, but the segmentation model does not activate any pixels
+                    PV_bool_seg = [True if seg_mask.sum() >= 1 else False for seg_mask in seg_masks]
+                    PV_masks = list(compress(seg_masks, PV_bool_seg))
+                    PV_image_coords = list(compress(coords4seg, PV_bool_seg))
 
-                    polygon_gdf = self.polygonCreator.mask2polygon(PV_image_coords[idx], mask)
+                    # Iterate over all PV masks and store the polygon for each detected PV system in a .csv file
+                    for idx, mask in enumerate(PV_masks):
 
-                    with open(Path(self.pv_db_path), "a") as csvFile:
+                        polygon_gdf = self.polygonCreator.mask2polygon(PV_image_coords[idx], mask)
 
-                        fieldnames = ['Current_Tile_240', 'UL_Image_16', 'PV_polygon']
-                        writer = csv.DictWriter(csvFile, fieldnames=fieldnames, delimiter=';')
+                        with open(Path(self.pv_db_path), "a") as csvFile:
 
-                        for index, row in polygon_gdf.iterrows():
+                            fieldnames = ['Current_Tile_240', 'UL_Image_16', 'PV_polygon']
+                            writer = csv.DictWriter(csvFile, fieldnames=fieldnames, delimiter=';')
 
-                            if row['class'] == 1:
-                                writer.writerow({'Current_Tile_240': currentTile,
-                                                 'UL_Image_16': Point(PV_image_coords[idx]),
-                                                 'PV_polygon': row['geometry']})
+                            for index, row in polygon_gdf.iterrows():
+
+                                if row['class'] == 1:
+                                    writer.writerow({'Current_Tile_240': currentTile,
+                                                     'UL_Image_16': Point(PV_image_coords[idx]),
+                                                     'PV_polygon': row['geometry']})
 
     def run(self):
         """
