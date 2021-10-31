@@ -667,16 +667,16 @@ class RegistryCreator:
         """
 
         # Two assumptions feed into these lines:
-        # 1. Rooftop tilts larger than 50 degrees are unrealistic and likely due to erroneous data. We set them to a
-        # standard tilt of 30 degrees
+        # 1. Rooftop tilts larger than 60 degrees are unrealistic and likely due to erroneous data. We set them to a
+        # standard tilt of 32 degrees
         # 2. PV panels are tilted in the same way as their underlying rooftop. On flat roofs, we assume a tilt angle
-        # of 30 degrees
+        # of 32 degrees
         raw_PV_installations_on_rooftop["Tilt"][
-            raw_PV_installations_on_rooftop["Tilt"] >= 50
-        ] = 30
+            raw_PV_installations_on_rooftop["Tilt"] >= 60
+        ] = 32
         raw_PV_installations_on_rooftop["Tilt"][
             raw_PV_installations_on_rooftop["Tilt"] == 0
-        ] = 30
+        ] = 32
 
         return raw_PV_installations_on_rooftop
 
