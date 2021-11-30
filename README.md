@@ -1,6 +1,6 @@
 # 3D-PV-Locator
 
-![Pipeline Overview](https://github.com/kdmayer/3D-PV-Locator/blob/master/pipeline_visualization.png)
+![Pipeline Overview](https://github.com/kdmayer/3D-PV-Locator/blob/master/pipeline_visualization_new.png)
 
 Repo with [documentation](docs/_build/rinoh/pv4ger.pdf) for "An Enriched Automated PV Registry: Combining Image Recognition and 3D Building Data" published at the "Tackling Climate Change with AI" workshop at NeurIPS 2020.
 
