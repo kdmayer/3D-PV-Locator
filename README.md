@@ -2,7 +2,7 @@
 
 ![Pipeline Overview](https://github.com/kdmayer/3D-PV-Locator/blob/master/pipeline_visualization_new.png)
 
-Repo with [documentation](docs/_build/rinoh/pv4ger.pdf) for "An Enriched Automated PV Registry: Combining Image Recognition and 3D Building Data" published at the "Tackling Climate Change with AI" workshop at NeurIPS 2020.
+Repo with [documentation](docs/_build/rinoh/pv4ger.pdf) for "3D-PV-Locator: Large-scale detection of rooftop-mounted photovoltaic systems in 3D" published in Applied Energy.
 
 3D-PV-Locator is a joint research initiative between [Stanford University](http://web.stanford.edu/group/energyatlas/home.html), [University of Freiburg](https://www.is.uni-freiburg.de/research/smart-cities-industries-group/smart-cities-industries-sci-group), and [LMU Munich](https://www.en.compecon.econ.uni-muenchen.de/staff/postdocs/arlt1/index.html) that aims at democratizing and accelerating the access to photovoltaic (PV) systems data in Germany and beyond. 
 
@@ -208,12 +208,14 @@ For the German state of North Rhine-Westphalia (NRW), OpenNRW provides:
 
 Please cite our work as
 
-    @misc{rausch2020enriched,
-      title={An Enriched Automated PV Registry: Combining Image Recognition and 3D Building Data}, 
-      author={Benjamin Rausch and Kevin Mayer and Marie-Louise Arlt and Gunther Gust and Philipp Staudt and Christof Weinhardt and Dirk Neumann and Ram Rajagopal},
-      year={2020},
-      eprint={2012.03690},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV}
+    @article{Mayer2021,
+      title={3D-PV-Locator: Large-scale detection of rooftop-mounted photovoltaic systems in 3D}, 
+      author={Mayer, Kevin and Rausch, Benjamin and Arlt, Marie-Louise and Gust, Gunther and Wang, Zhecheng and Neumann, Dirk and Rajagopal, Ram},
+      journal={Applied Energy},
+      volume={310},
+      year={2021},
+      publisher={Elsevier}
     }
+
+
 
