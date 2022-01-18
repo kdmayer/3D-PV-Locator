@@ -2,7 +2,7 @@
 
 ![Pipeline Overview](https://github.com/kdmayer/3D-PV-Locator/blob/master/pipeline_visualization_new.png)
 
-Repo with [documentation](docs/_build/rinoh/pv4ger.pdf) for "3D-PV-Locator: Large-scale detection of rooftop-mounted photovoltaic systems in 3D" published in [Applied Energy](https://www.sciencedirect.com/science/article/pii/S0306261921016937?via%3Dihub).
+Repo with [documentation](docs/_build/rinoh/pv4ger.pdf) for "[3D-PV-Locator: Large-scale detection of rooftop-mounted photovoltaic systems in 3D](https://www.sciencedirect.com/science/article/pii/S0306261921016937?via%3Dihub)" published in Applied Energy.
 
 3D-PV-Locator is a joint research initiative between [Stanford University](http://web.stanford.edu/group/energyatlas/home.html), [University of Freiburg](https://www.is.uni-freiburg.de/research/smart-cities-industries-group/smart-cities-industries-sci-group), and [LMU Munich](https://www.en.compecon.econ.uni-muenchen.de/staff/postdocs/arlt1/index.html) that aims at democratizing and accelerating the access to photovoltaic (PV) systems data in Germany and beyond. 
 
