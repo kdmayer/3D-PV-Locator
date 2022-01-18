@@ -208,14 +208,15 @@ For the German state of North Rhine-Westphalia (NRW), OpenNRW provides:
 
 Please cite our work as
 
-    @article{Mayer2021,
-      title={3D-PV-Locator: Large-scale detection of rooftop-mounted photovoltaic systems in 3D}, 
-      author={Mayer, Kevin and Rausch, Benjamin and Arlt, Marie-Louise and Gust, Gunther and Wang, Zhecheng and Neumann, Dirk and Rajagopal, Ram},
-      journal={Applied Energy},
-      volume={310},
-      year={2021},
-      publisher={Elsevier}
+    @article{MAYER2022,
+    title = {3D-PV-Locator: Large-scale detection of rooftop-mounted photovoltaic systems in 3D},
+    journal = {Applied Energy},
+    volume = {310},
+    pages = {118469},
+    year = {2022},
+    issn = {0306-2619},
+    doi = {https://doi.org/10.1016/j.apenergy.2021.118469},
+    url = {https://www.sciencedirect.com/science/article/pii/S0306261921016937},
+    author = {Kevin Mayer and Benjamin Rausch and Marie-Louise Arlt and Gunther Gust and Zhecheng Wang and Dirk Neumann and Ram Rajagopal},
+    keywords = {Solar panels, Renewable energy, Image recognition, Deep learning, Computer vision, 3D building data, Remote sensing, Aerial imagery},
     }
-
-
-
