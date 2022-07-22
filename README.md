@@ -4,6 +4,10 @@
 
 Repo with [documentation](docs/_build/rinoh/pv4ger.pdf) for "[3D-PV-Locator: Large-scale detection of rooftop-mounted photovoltaic systems in 3D](https://www.sciencedirect.com/science/article/pii/S0306261921016937?via%3Dihub)" published in Applied Energy.
 
+In case you would like to explore the code with which we created the image datasets and pre-processed the CityGML files, please have a look at the following [GitHub repo](https://github.com/kdmayer/CityGML-Preprocessing-Demo).
+
+## About
+
 3D-PV-Locator is a joint research initiative between [Stanford University](http://web.stanford.edu/group/energyatlas/home.html), [University of Freiburg](https://www.is.uni-freiburg.de/research/smart-cities-industries-group/smart-cities-industries-sci-group), and [LMU Munich](https://www.en.compecon.econ.uni-muenchen.de/staff/postdocs/arlt1/index.html) that aims at democratizing and accelerating the access to photovoltaic (PV) systems data in Germany and beyond. 
 
 To do so, we have developed a computer vision-based pipeline leveraging aerial imagery with a spatial resolution of
@@ -55,7 +59,7 @@ You might also want to take a look at other projects within Stanford's EnergyAtl
 - [EnergyAtlas](http://web.stanford.edu/group/energyatlas/home.html)
 - DeepSolar for Germany: [Publication](https://ieeexplore.ieee.org/document/9203258) and [Code](https://github.com/kdmayer/PV_Pipeline)
 
-# Public S3 Bucket: PV4GER
+## Datasets and pre-processing code are public
 
 Please note that apart from the pipeline code and documentation, we also provide you with
 
@@ -65,7 +69,9 @@ Please note that apart from the pipeline code and documentation, we also provide
 - A **4,000+ image dataset** for PV system segmentation.
 - **Pre-processed 3D building data** in .GeoJSON format for the entire state of North Rhine-Westphalia.
 
-In case you use any of these, please cite our work as specified at the bottom of this page.
+In case you would like to explore the code with which we created the image datasets and pre-processed the CityGML files, please have a look at the following [GitHub repo](https://github.com/kdmayer/CityGML-Preprocessing-Demo).
+
+When using these resources, please cite our work as specified at the bottom of this page.
 
 **NOTE**: All images and 3D building data is obtained from [openNRW](https://www.bezreg-koeln.nrw.de/brk_internet/geobasis/luftbildinformationen/aktuell/digitale_orthophotos/index.html). Labeling of the images for PV system classification and segmentation has been conducted by us.
 
