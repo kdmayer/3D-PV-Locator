@@ -128,6 +128,10 @@ Mounting the /data and /log directories allows us to share the code outputs betw
 
 Please ensure that *<YOUR_ABSOLUTE_PATH_TO_THE_PROJECT_REPO>* corresponds to your absolute path to the 3D-PV-Locator repo on your local machine, e.g., */Users/kevin/Projects/Active/3D-PV-Locator/* in my case.
 
+Note: Depending on how many tiles you want to download, you will need to adjust the memory of your Docker container with the following flag for the docker run command:
+
+    --memory=<memory>
+
 Having the docker container in interactive mode, we can now decide which pipeline steps we want to run by putting a "1" next them.
 
     Example:
