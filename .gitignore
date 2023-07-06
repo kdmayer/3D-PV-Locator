@@ -1,4 +1,6 @@
 .DS_Store
+data/tiles/*.png
+data/viersen_example_tiles/*.png
 data/coords/*.pickle
 data/rooftop_data/*.geojson
 data/pv_database/*.csv

@@ -6,7 +6,7 @@ bing_key:
 
 # -------- Area of interest --------
 # Specify the county for which you would like to run the analysis. Feel free to replace "Essen" by any other name from the list of available counties.
-county4analysis: Essen
+county4analysis: Viersen
 
 # -------- Pipeline --------
 # Which part of the pipeline do you want to execute?
@@ -41,7 +41,7 @@ seg_threshold: 0.55
 input_size: 299
 
 # Batch size should be as large as possible to speed up the classification process
-batch_size: 4
+batch_size: 2
 
 # -------- Model Checkpoint --------
 # Path for loading classification model weights

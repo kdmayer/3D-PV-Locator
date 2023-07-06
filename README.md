@@ -94,13 +94,8 @@ Please download our pre-trained networks for PV system classification and segmen
 
     aws s3 cp --request-payer requester s3://pv4ger/NRW_models/inceptionv3_weights.tar models/classification/
     aws s3 cp --request-payer requester s3://pv4ger/NRW_models/deeplabv3_weights.tar models/segmentation/
-    
-Next, set up your conda environment with all required dependencies by executing
 
-    conda env create --file environment.yml
-    conda activate pv4ger
-    
-Lastly, to create PV registries for any county within North Rhine-Westphalia, you need to 
+To create PV registries for any county within North Rhine-Westphalia, you need to 
 
 1. Download the 3D building data for your desired county from our S3 bucket by executing and replacing <YOUR_DESIRED_COUNTY.geojson> with a county name from the list below:
 
@@ -125,7 +120,15 @@ Lastly, to create PV registries for any county within North Rhine-Westphalia, yo
     
     **NOTE**: If you leave <YOUR_BING_KEY> empty, geocoding will be done by the free OSM geocoding service.
 
-4. Put a "1" next to all the pipeline steps that you would like to run
+Once the data and models are in place, we build and run the docker container with all required dependencies in interactive mode and mount the /data and /log directory in the container to our local machine.
+Mounting the /data and /log directories allows us to share the code outputs between the container and our local machine.
+
+    docker build -t 3d_pv_docker .
+    docker run -it -v <YOUR_ABSOLUTE_PATH_TO_THE_PROJECT_REPO>/data/:/app/data/ <YOUR_ABSOLUTE_PATH_TO_THE_PROJECT_REPO>/logs/:/app/logs/ 3d_pv_docker
+
+Please ensure that *<YOUR_ABSOLUTE_PATH_TO_THE_PROJECT_REPO>* corresponds to your absolute path to the 3D-PV-Locator repo on your local machine, e.g., */Users/kevin/Projects/Active/3D-PV-Locator/* in my case.
+
+Having the docker container in interactive mode, we can now decide which pipeline steps we want to run by putting a "1" next them.
 
     Example:
     
@@ -139,8 +142,12 @@ Lastly, to create PV registries for any county within North Rhine-Westphalia, yo
 
         run_registry_creator: 1
         
-   and execute run_pipeline.py in the root directory.
-        
+In the interactive Docker container, we then execute the pipeline with:
+
+      python run_pipeline.py
+
+After successful completion, the resulting PV registry for your area of interest will be written to /data/pv_registry.
+
 ## List of available counties:
         
 Please choose the county you would like to run the pipeline for from the following list:
